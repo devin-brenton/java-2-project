@@ -5,6 +5,11 @@ import java.util.List;
 import edu.ncsu.csc216.book_quiz.util.EmptyQuestionListException;
 import edu.ncsu.csc216.question_library.*;
 
+/**
+ * Abstract class to represent the current state of the book quiz.
+ * @author Devin Brenton
+ *
+ */
 public abstract class QuestionState {
 
 	private static final int FRONT = 0;
@@ -28,12 +33,11 @@ public abstract class QuestionState {
 	private Question currentQuestion;
 	
 	/**
-	 * Constructor
-	 * 
-	 * @param list
+	 * Constructor - takes the list of questions and stores them as waitingQuestions
+	 * @param list list of unasked questions to store upon construction
 	 */
 	public QuestionState(List<Question> list) {
-		
+		waitingQuestions = list;
 	}
 
 	/**

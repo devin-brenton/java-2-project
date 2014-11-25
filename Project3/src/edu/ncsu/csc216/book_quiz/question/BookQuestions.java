@@ -6,8 +6,10 @@ package edu.ncsu.csc216.book_quiz.question;
 import java.util.List;
 
 import edu.ncsu.csc216.question_library.*;
+import edu.ncsu.csc216.book_quiz.util.*;
 
 /**
+ * Implements a Finite State Machine for question sequencing, additions, and transitions.
  * @author RoPanu
  * @author Devin Brenton
  */
@@ -42,6 +44,9 @@ public class BookQuestions {
 	
 	/**
 	 * Constructor - takes three Lists to initialize its inner concrete state classes.
+	 * @param standard list of standard quiz questions
+	 * @param elementary list of elementary quiz questions
+	 * @param advanced list of advanced quiz questions
 	 */
 	public BookQuestions(List<StandardQuestion> standard, List<ElementaryQuestion> elementary, 
 			List<AdvancedQuestion> advanced) {
@@ -80,7 +85,7 @@ public class BookQuestions {
 	 * @throws EmptyQuestionListException if the answer cannot be processed.
 	 */
 	public String processAnswer(String answer) {
-		
+		return state.processAnswer(answer);
 	}
 	
 	/**
@@ -88,7 +93,7 @@ public class BookQuestions {
 	 * @return number of correct answers
 	 */
 	public int getNumCorrectQuestions() {
-		
+		return numCorrectAnswers;
 	}
 	
 	/**
@@ -96,7 +101,7 @@ public class BookQuestions {
 	 * @return number of attempted questions
 	 */
 	public int getNumAttemptedQuestions() {
-		
+		return numAttemptQuests;
 	}
 	
 	/**
@@ -149,17 +154,34 @@ public class BookQuestions {
 	
 //-----------------------------Inner Classes For FSM--------------------------//
 	
+	/**
+	 * Concrete state when user is answering elementary questions
+	 * @author Devin Brenton
+	 *
+	 */
 	private class ElementaryQuestionState extends QuestionState {
 
+		/** Number of attempts at a question */
 		private int attempts;
 		
+		/** Number of elementary questions answered correctly in a row */
 		private int numCorrectInRow;
-		
+
+		/**
+		 * Constructor - stores the parameter list as a list of waiting standard questions (questions yet to be asked).
+		 * @param list list of standard questions
+		 */
 		public ElementaryQuestionState(List<Question> list) {
 			super(list);
-			// TODO Auto-generated constructor stub
 		}
 
+		/**
+		 * This method corresponds to transitions in the FSM. If an ElementaryQuestion is incorrectly answered 
+		 * a hint is displayed and the question is asked again. If two ElementaryQuestion are answered correctly
+		 * in a row, the state is set to StandardQuestionState.
+		 * @param answer answer to be processed
+		 * @throws EmptyQuestionListExceptions if currentQuestion is null.
+		 */
 		@Override
 		public String processAnswer(String answer) {
 			// TODO Auto-generated method stub
@@ -167,16 +189,32 @@ public class BookQuestions {
 		}
 		
 	}
-	
+
+	/**
+	 * Concrete state when user is answering standard questions
+	 * @author Devin Brenton
+	 *
+	 */
 	private class StandardQuestionState extends QuestionState {
 
+		/** Number of standard questions answered correctly in a row */
 		private int numCorrectInRow;
 		
+		/**
+		 * Constructor - stores the parameter list as a list of waiting standard questions (questions yet to be asked).
+		 * @param list list of standard questions
+		 */
 		public StandardQuestionState(List<Question> list) {
 			super(list);
-			// TODO Auto-generated constructor stub
 		}
 
+		/**
+		 * This method corresponds to transitions in the FSM. If a StandardQuestion is incorrectly answered 
+		 * the state is set to ElementaryQuestionState. If two StandardQuestions are answered correctly
+		 * in a row, the state is set to AdvancedQuestionState.
+		 * @param answer answer to be processed
+		 * @throws EmptyQuestionListExceptions if currentQuestion is null.
+		 */
 		@Override
 		public String processAnswer(String answer) {
 			// TODO Auto-generated method stub
@@ -184,14 +222,29 @@ public class BookQuestions {
 		}
 		
 	}
-	
+
+	/**
+	 * Concrete state when user is answering advanced questions
+	 * @author Devin Brenton
+	 *
+	 */
 	private class AdvancedQuestionState extends QuestionState {
 
+		/**
+		 * Constructor - stores the parameter list as a list of waiting advanced questions (questions yet to be asked).
+		 * @param list list of advanced questions
+		 */
 		public AdvancedQuestionState(List<Question> list) {
 			super(list);
-			// TODO Auto-generated constructor stub
 		}
 
+		/**
+		 * This method corresponds to transitions in the FSM. If a AdvancedQuestion is incorrectly answered 
+		 * the state is set to StandardQuestionState. If an AdvancedQuestion is answered correctly a 
+		 * congratulatory message is displayed.
+		 * @param answer answer to be processed
+		 * @throws EmptyQuestionListExceptions if currentQuestion is null.
+		 */
 		@Override
 		public String processAnswer(String answer) {
 			// TODO Auto-generated method stub
