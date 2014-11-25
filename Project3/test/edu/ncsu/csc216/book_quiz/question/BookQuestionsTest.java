@@ -5,7 +5,11 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.ncsu.csc216.question_library.QuestionReader;
+
 public class BookQuestionsTest {
+	
+	private QuestionReader reader;
 
 	@Before
 	public void setUp() throws Exception {

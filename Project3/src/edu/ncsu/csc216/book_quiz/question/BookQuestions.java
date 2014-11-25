@@ -43,8 +43,8 @@ public class BookQuestions {
 	/**
 	 * Constructor - takes three Lists to initialize its inner concrete state classes.
 	 */
-	public BookQuestions(List<StandardQuestion>, List<ElementaryQuestion>, 
-			List<AdvancedQuestion>) {
+	public BookQuestions(List<StandardQuestion> standard, List<ElementaryQuestion> elementary, 
+			List<AdvancedQuestion> advanced) {
 		
 	}
 	
