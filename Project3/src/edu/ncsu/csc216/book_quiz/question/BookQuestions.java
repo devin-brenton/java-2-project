@@ -64,6 +64,7 @@ public class BookQuestions {
 	/**
 	 * Returns the text portion of the currentQuestion
 	 * @return text of the question
+	 * @throws EmptyQuestionListException if currentQuestion is null
 	 */
 	public String getCurrentQuestionText() {
 		
@@ -72,6 +73,7 @@ public class BookQuestions {
 	/**
 	 * Returns the four questions choices of the currentQuestion
 	 * @return array of four possible question choices
+	 * @throws EmptyQuestionListException if currentQuestion is null
 	 */
 	public String[] getCurrentQuestionChoices() {
 		
