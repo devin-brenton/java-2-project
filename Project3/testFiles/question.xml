@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Questions>
+	<StandardQuestion>
+		<Question>Question 1</Question>
+		<ChoiceA>a</ChoiceA>
+		<ChoiceB>b</ChoiceB>
+		<ChoiceC>c</ChoiceC>
+		<ChoiceD>d</ChoiceD>
+		<Answer>c</Answer>
+	</StandardQuestion>
+</Questions>

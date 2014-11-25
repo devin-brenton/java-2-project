@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Questions>
+	<StandardQuestion>
+		<Question>Standard Question 1</Question>
+		<ChoiceA>Choice a</ChoiceA>
+		<ChoiceB>Choice b</ChoiceB>
+		<ChoiceC>Choice c</ChoiceC>
+		<ChoiceD>Choice d</ChoiceD>
+		<Answer>D</Answer>
+	</StandardQuestion>
+	<StandardQuestion>
+		<Question>Standard Question 2</Question>
+		<ChoiceA>Choice a</ChoiceA>
+		<ChoiceB>Choice b</ChoiceB>
+		<ChoiceC>Choice c</ChoiceC>
+		<ChoiceD>Choice d</ChoiceD>
+		<Answer>C</Answer>
+	</StandardQuestion>
+	<StandardQuestion>
+		<Question>Standard Question 3</Question>
+		<ChoiceA>Choice a</ChoiceA>
+		<ChoiceB>Choice b</ChoiceB>
+		<ChoiceC>Choice c</ChoiceC>
+		<ChoiceD>Choice d</ChoiceD>
+		<Answer>A</Answer>
+	</StandardQuestion>
+	<ElementaryQuestion>
+		<Question>Elementary Question 1</Question>
+		<ChoiceA>Choice a</ChoiceA>
+		<ChoiceB>Choice b</ChoiceB>
+		<ChoiceC>Choice c</ChoiceC>
+		<ChoiceD>Choice d</ChoiceD>
+		<Answer>D</Answer>
+		<Hint>Here is a hint. The correct answer is d.</Hint>
+	</ElementaryQuestion>
+	<ElementaryQuestion>
+		<Question>Elementary Question 2</Question>
+		<ChoiceA>Choice a</ChoiceA>
+		<ChoiceB>Choice b</ChoiceB>
+		<ChoiceC>Choice c</ChoiceC>
+		<ChoiceD>Choice d</ChoiceD>
+		<Answer>C</Answer>
+		<Hint>Here is a hint. The correct answer is c.</Hint>
+	</ElementaryQuestion>
+	<ElementaryQuestion>
+		<Question>Elementary Question 1</Question>
+		<ChoiceA>Choice a</ChoiceA>
+		<ChoiceB>Choice b</ChoiceB>
+		<ChoiceC>Choice c</ChoiceC>
+		<ChoiceD>Choice d</ChoiceD>
+		<Answer>A</Answer>
+		<Hint>Here is a hint. The correct answer is a.</Hint>
+	</ElementaryQuestion>
+	<ElementaryQuestion>
+		<Question>Elementary Question 1</Question>
+		<ChoiceA>Choice a</ChoiceA>
+		<ChoiceB>Choice b</ChoiceB>
+		<ChoiceC>Choice c</ChoiceC>
+		<ChoiceD>Choice d</ChoiceD>
+		<Answer>B</Answer>
+		<Hint>Here is a hint. The correct answer is b.</Hint>
+	</ElementaryQuestion>
+	<AdvancedQuestion>
+		<Question>Advanced Question 1</Question>
+		<ChoiceA>Choice a</ChoiceA>
+		<ChoiceB>Choice b</ChoiceB>
+		<ChoiceC>Choice c</ChoiceC>
+		<ChoiceD>Choice d</ChoiceD>
+		<Answer>C</Answer>
+		<Comment>Great work!</Comment>
+	</AdvancedQuestion>
+	<AdvancedQuestion>
+		<Question>Advanced Question 1</Question>
+		<ChoiceA>Choice a</ChoiceA>
+		<ChoiceB>Choice b</ChoiceB>
+		<ChoiceC>Choice c</ChoiceC>
+		<ChoiceD>Choice d</ChoiceD>
+		<Answer>C</Answer>
+		<Comment>Good job!</Comment>
+	</AdvancedQuestion>
+</Questions>
