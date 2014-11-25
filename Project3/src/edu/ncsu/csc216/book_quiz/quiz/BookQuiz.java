@@ -1,10 +1,32 @@
 package edu.ncsu.csc216.book_quiz.quiz;
 
+import edu.ncsu.csc216.book_quiz.question.BookQuestions;
 import edu.ncsu.csc216.book_quiz.util.EmptyQuestionListException;
-import edu.ncsu.csc216.question_library.QuestionException;
+import edu.ncsu.csc216.question_library.*;
 
 public class BookQuiz implements QuizMaster {
-
+	
+	/** Contains the question for quizzing */
+	private BookQuestions questions;
+	
+	/** Reads the XML file and returns arrays of questions */
+	private QuestionReader reader;
+	
+	/** Writes XML files from the arrays of questions */
+	private QuestionWriter writer;
+	
+	/**
+	 * Constructor - The String parameter for the constructor is required for 
+	 * reader, which is of type QuestionReader. After the constructor creates 
+	 * reader, it can create questions, which is of type BookQuestions. The 
+	 * three List parameters for the BookQuestions constructor are obtained 
+	 * from reader.
+	 * @param fileName name of XML file containing the questions
+	 */
+	public BookQuiz(String fileName) {
+		
+	}
+	
 	/**
 	 * Are there any more questions remaining in this quiz?
 	 * @return true if there are, false if there are not
@@ -71,6 +93,22 @@ public class BookQuiz implements QuizMaster {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	
+	/**
+	 * Helper method
+	 * @param s string to validate
+	 */
+	private void validateString(String s) {
+		
+	}
+	
+	/**
+	 * Helper method
+	 * @param array array to validate
+	 */
+	private void validateStringArray(String[] array) {
+		
+	}
 
 	/**
 	 * Adds a StandardQuestion to the QuestionLibrary.
@@ -127,7 +165,5 @@ public class BookQuiz implements QuizMaster {
 		// TODO Auto-generated method stub
 		
 	}
-	
-	
 
 }
