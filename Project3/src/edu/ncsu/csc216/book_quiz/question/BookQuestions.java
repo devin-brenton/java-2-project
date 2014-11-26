@@ -50,7 +50,14 @@ public class BookQuestions {
 	 */
 	public BookQuestions(List<StandardQuestion> standard, List<ElementaryQuestion> elementary, 
 			List<AdvancedQuestion> advanced) {
+		elemState = new ElementaryQuestionState(elementary);
+		stdState = new StandardQuestionState(standard);
+		advState = new AdvancedQuestionState(advanced);
 		
+		state = stdState;
+		
+		numCorrectAnswers = 0;
+		numAttemptQuests = 0;
 	}
 	
 	/**
@@ -94,7 +101,7 @@ public class BookQuestions {
 	 * Returns the number of questions that have been correctly answered.
 	 * @return number of correct answers
 	 */
-	public int getNumCorrectQuestions() {
+	public int getNumCorrectAnswers() {
 		return numCorrectAnswers;
 	}
 	
@@ -154,8 +161,9 @@ public class BookQuestions {
 		
 	}
 	
+//----------------------------------------------------------------------------//
 //-----------------------------Inner Classes For FSM--------------------------//
-	
+//----------------------------------------------------------------------------//
 	/**
 	 * Concrete state when user is answering elementary questions
 	 * @author Devin Brenton
@@ -171,9 +179,9 @@ public class BookQuestions {
 
 		/**
 		 * Constructor - stores the parameter list as a list of waiting standard questions (questions yet to be asked).
-		 * @param list list of standard questions
+		 * @param list list of elementary questions
 		 */
-		public ElementaryQuestionState(List<Question> list) {
+		public ElementaryQuestionState(List<ElementaryQuestion> list) {
 			super(list);
 		}
 
@@ -236,7 +244,7 @@ public class BookQuestions {
 		 * Constructor - stores the parameter list as a list of waiting advanced questions (questions yet to be asked).
 		 * @param list list of advanced questions
 		 */
-		public AdvancedQuestionState(List<Question> list) {
+		public AdvancedQuestionState(List<AdvancedQuestion> list) {
 			super(list);
 		}
 

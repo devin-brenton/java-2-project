@@ -53,7 +53,7 @@ public class BookQuestionsTest {
 		assertEquals(advanced, questions.getAdvancedQuestions());
 		assertTrue(questions.hasMoreQuestions());
 		assertEquals(questions.getNumAttemptedQuestions(), 0);
-		assertEquals(questions.getNumCorrectQuestions(), 0);
+		assertEquals(questions.getNumAttemptedQuestions(), 0);
 		
 		standard = null;
 		elementary = null;
@@ -64,7 +64,7 @@ public class BookQuestionsTest {
 		assertEquals(advanced, questions.getAdvancedQuestions());
 		assertFalse(questions.hasMoreQuestions());
 		assertEquals(questions.getNumAttemptedQuestions(), 0);
-		assertEquals(questions.getNumCorrectQuestions(), 0);
+		assertEquals(questions.getNumAttemptedQuestions(), 0);
 	}
 
 	@Test
@@ -132,7 +132,7 @@ public class BookQuestionsTest {
 		assertTrue(questions.getCurrentQuestionText().equals("Elementary Question 2"));
 		
 		//Give correct answer for elementary question 2. 
-		//Next question should be advanced but there are none left so exception will be thrown
+		//Next question should be standard but there are none left so exception will be thrown
 		questions.processAnswer("c");
 		try {
 			questions.getCurrentQuestionText();
@@ -142,44 +142,264 @@ public class BookQuestionsTest {
 		}
 	}
 
+	/**
+	 * Test that BookQuestions correctly counts the number of correctly answered questions
+	 */
 	@Test
 	public void testGetNumCorrectQuestions() {
-		fail("Not yet implemented");
+		assertEquals(questions.getNumCorrectAnswers(), 0);
+		
+		//Give correct answer for standard question 1. Next question will be standard
+		questions.processAnswer("d");
+		assertEquals(questions.getNumCorrectAnswers(), 1);
+		
+		//Give correct answer for standard question 2. Next question will be advanced
+		questions.processAnswer("c");
+		assertEquals(questions.getNumCorrectAnswers(), 2);
+		
+		//Give correct answer for advanced question 1. Next question will be advanced
+		questions.processAnswer("d");
+		assertEquals(questions.getNumCorrectAnswers(), 3);
+
+		//Give incorrect answer for advanced question 2. Next question will be standard
+		questions.processAnswer("d");
+		assertEquals(questions.getNumCorrectAnswers(), 3);
+		
+		//Give incorrect answer for standard question 3. Next question will be elementary
+		questions.processAnswer("d");
+		assertEquals(questions.getNumCorrectAnswers(), 3);
+		
+		//Give incorrect answer for elementary question 1. Next question will be the same question
+		questions.processAnswer("a");
+		assertEquals(questions.getNumCorrectAnswers(), 3);
+		
+		//Give correct answer for elementary question 1. Next question will be elementary
+		questions.processAnswer("d");
+		assertEquals(questions.getNumCorrectAnswers(), 4);
+		
+		//Give correct answer for elementary question 2. 
+		//Next question should be standard but there are none left
+		questions.processAnswer("c");
+		assertEquals(questions.getNumCorrectAnswers(), 5);
 	}
 
+	/**
+	 * Test that BookQuestions correctly counts the number of questions attempted
+	 */
 	@Test
 	public void testGetNumAttemptedQuestions() {
-		fail("Not yet implemented");
+		assertEquals(questions.getNumAttemptedQuestions(), 0);
+		
+		//Give correct answer for standard question 1. Next question will be standard
+		questions.processAnswer("d");
+		assertEquals(questions.getNumAttemptedQuestions(), 1);
+		
+		//Give correct answer for standard question 2. Next question will be advanced
+		questions.processAnswer("c");
+		assertEquals(questions.getNumAttemptedQuestions(), 2);
+		
+		//Give correct answer for advanced question 1. Next question will be advanced
+		questions.processAnswer("d");
+		assertEquals(questions.getNumAttemptedQuestions(), 3);
+
+		//Give incorrect answer for advanced question 2. Next question will be standard
+		questions.processAnswer("d");
+		assertEquals(questions.getNumAttemptedQuestions(), 4);
+		
+		//Give incorrect answer for standard question 3. Next question will be elementary
+		questions.processAnswer("d");
+		assertEquals(questions.getNumAttemptedQuestions(), 5);
+		
+		//Give incorrect answer for elementary question 1. Next question will be the same question
+		questions.processAnswer("a");
+		assertEquals(questions.getNumAttemptedQuestions(), 6);
+		
+		//Give correct answer for elementary question 1. Next question will be elementary
+		questions.processAnswer("d");
+		assertEquals(questions.getNumAttemptedQuestions(), 7);
+		
+		//Give correct answer for elementary question 2. 
+		//Next question should be standard but there are none left
+		questions.processAnswer("c");
+		assertEquals(questions.getNumAttemptedQuestions(), 8);
 	}
 
+	/**
+	 * Test the functionality of adding standard questions to BookQuestions
+	 */
 	@Test
 	public void testAddStandardQuestion() {
-		fail("Not yet implemented");
+		StandardQuestion q = new StandardQuestion();
+		q.setQuestion("Standard Question");
+		q.setChoiceA("a");
+		q.setChoiceB("b");
+		q.setChoiceC("c");
+		q.setChoiceD("d");
+		q.setAnswer("a");
+		
+		questions.addStandardQuestion(q);
+		
+		assertTrue(questions.getCurrentQuestionText().equals("Standard Question 1"));
+		
+		//Give correct answer for standard question 1. Next question will be standard
+		questions.processAnswer("d");
+		assertTrue(questions.getCurrentQuestionText().equals("Standard Question 2"));
+		
+		//Give correct answer for standard question 2. Next question will be advanced
+		questions.processAnswer("c");
+		assertTrue(questions.getCurrentQuestionText().equals("Advanced Question 1"));
+		
+		//Give incorrect answer for advanced question 1. Next question will be standard
+		questions.processAnswer("a");
+		assertTrue(questions.getCurrentQuestionText().equals("Standard Question 3"));
+		
+		//Give correct answer for standard question 3. Next question will be the newly added standard question
+		questions.processAnswer("a");
+		assertTrue(questions.getCurrentQuestionText().equals("Standard Question"));
+		
+		//Restart questions
+		questions = new BookQuestions(standard, elementary, advanced);
+		
+		assertTrue(questions.getCurrentQuestionText().equals("Standard Question 1"));
+		
+		//Give correct answer for standard question 1. Next question will be standard
+		questions.processAnswer("d");
+		assertTrue(questions.getCurrentQuestionText().equals("Standard Question 2"));
+		
+		//Give correct answer for standard question 2. Next question will be advanced
+		questions.processAnswer("c");
+		assertTrue(questions.getCurrentQuestionText().equals("Advanced Question 1"));
+		
+		//Give incorrect answer for advanced question 1. Next question will be standard
+		questions.processAnswer("a");
+		assertTrue(questions.getCurrentQuestionText().equals("Standard Question 3"));
+		
+		//Give correct answer for standard question 3. There will not be another question
+		questions.processAnswer("a");
+		
+		//Add the new question
+		questions.addStandardQuestion(q);
+		assertTrue(questions.getCurrentQuestionText().equals("Standard Question"));
 	}
 
+	/**
+	 * Test the functionality of adding elementary questions to BookQuestions
+	 */
 	@Test
 	public void testAddElementaryQuestion() {
-		fail("Not yet implemented");
+		ElementaryQuestion q = new ElementaryQuestion();
+		q.setQuestion("Elementary Question");
+		q.setChoiceA("a");
+		q.setChoiceB("b");
+		q.setChoiceC("c");
+		q.setChoiceD("d");
+		q.setAnswer("a");
+		
+		questions.addElementaryQuestion(q);
+		
+		assertTrue(questions.getCurrentQuestionText().equals("Standard Question 1"));
+		
+		//Give incorrect answer for standard question 1. Next question will be elementary
+		questions.processAnswer("a");
+		assertTrue(questions.getCurrentQuestionText().equals("Elementary Question 1"));
+		
+		//Give correct answer for Elementary Question 1. Next question will be elementary
+		questions.processAnswer("d");
+		assertTrue(questions.getCurrentQuestionText().equals("Elementary Question 2"));
+		
+		//Give incorrect answer for Elementary Question 2. Next question will be the same question
+		questions.processAnswer("a");
+		assertTrue(questions.getCurrentQuestionText().equals("Elementary Question 2"));
+		
+		//Give correct answer for Elementary Question 2. Next question will be elementary
+		questions.processAnswer("c");
+		assertTrue(questions.getCurrentQuestionText().equals("Elementary Question 3"));
+		
+		//Give correct answer for Elementary Question 3. Next question will be elementary
+		questions.processAnswer("a");
+		assertTrue(questions.getCurrentQuestionText().equals("Elementary Question 4"));
+		
+		//Give incorrect answer for Elementary Question 4. Next question will be the same question
+		questions.processAnswer("a");
+		assertTrue(questions.getCurrentQuestionText().equals("Elementary Question 4"));
+		
+		//Give incorrect answer for Elementary Question 4. Next question will be the new question
+		questions.processAnswer("a");
+		assertTrue(questions.getCurrentQuestionText().equals("Elementary Question"));
+		
+		//Restart questions
+		questions = new BookQuestions(standard, elementary, advanced);		
+		questions.addElementaryQuestion(q);
+		
+		List<Question> list = questions.getElementaryQuestions();
+		assertEquals(list.get(4), q);
+		
+		ElementaryQuestion q2 = new ElementaryQuestion();
+		q.setQuestion("Elementary Question");
+		q.setChoiceA("a");
+		q.setChoiceB("b");
+		q.setChoiceC("c");
+		q.setChoiceD("d");
+		q.setAnswer("a");
+		
+		questions.addElementaryQuestion(q2);
+		list = questions.getElementaryQuestions();
+		assertEquals(list.get(4), q);
+		assertEquals(list.get(5), q2);
 	}
 
+	/**
+	 * Test the functionality of adding advanced questions to BookQuestions
+	 */
 	@Test
 	public void testAddAdvancedQuestion() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetStandardQuestions() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetElementaryQuestions() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetAdvancedQuestions() {
-		fail("Not yet implemented");
+		AdvancedQuestion q = new AdvancedQuestion();
+		q.setQuestion("Advanced Question");
+		q.setChoiceA("a");
+		q.setChoiceB("b");
+		q.setChoiceC("c");
+		q.setChoiceD("d");
+		q.setAnswer("a");
+		
+		questions.addAdvancedQuestion(q);
+		
+		assertTrue(questions.getCurrentQuestionText().equals("Standard Question 1"));
+		
+		//Give correct answer for standard question 1. Next question will be standard
+		questions.processAnswer("d");
+		assertTrue(questions.getCurrentQuestionText().equals("Standard Question 2"));
+		
+		//Give correct answer for standard question 2. Next question will be advanced
+		questions.processAnswer("c");
+		assertTrue(questions.getCurrentQuestionText().equals("Advanced Question 1"));
+		
+		//Give correct answer for advanced question 1. Next question will be advanced
+		questions.processAnswer("d");
+		assertTrue(questions.getCurrentQuestionText().equals("Advanced Question 2"));
+		
+		//Give correct answer for advanced question 2. Next question will be the newly added advanced question
+		questions.processAnswer("c");
+		assertTrue(questions.getCurrentQuestionText().equals("Advanced Question"));
+		
+		//Restart questions
+		questions = new BookQuestions(standard, elementary, advanced);		
+		questions.addAdvancedQuestion(q);
+		
+		List<Question> list = questions.getAdvancedQuestions();
+		assertEquals(list.get(2), q);
+		
+		AdvancedQuestion q2 = new AdvancedQuestion();
+		q.setQuestion("Advanced Question");
+		q.setChoiceA("a");
+		q.setChoiceB("b");
+		q.setChoiceC("c");
+		q.setChoiceD("d");
+		q.setAnswer("a");
+		
+		questions.addAdvancedQuestion(q2);
+		list = questions.getAdvancedQuestions();
+		assertEquals(list.get(2), q);
+		assertEquals(list.get(3), q2);
 	}
 
 }
