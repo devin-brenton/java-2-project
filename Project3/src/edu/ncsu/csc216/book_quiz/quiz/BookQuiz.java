@@ -23,8 +23,11 @@ public class BookQuiz implements QuizMaster {
 	 * from reader.
 	 * @param fileName name of XML file containing the questions
 	 */
-	public BookQuiz(String fileName) {
-		
+	public BookQuiz(String fileName) throws QuestionException {
+		this.reader = new QuestionReader(fileName);
+		this.writer = new QuestionWriter(fileName);
+		this.questions = new BookQuestions(reader.getStandardQuestions(), reader.getElementaryQuestions(), 
+						reader.getAdvancedQuestions());
 	}
 	
 	/**
@@ -33,8 +36,7 @@ public class BookQuiz implements QuizMaster {
 	 */
 	@Override
 	public boolean hasMoreQuestions() {
-		// TODO Auto-generated method stub
-		return false;
+		return questions.hasMoreQuestions();
 	}
 
 	/**
@@ -44,8 +46,7 @@ public class BookQuiz implements QuizMaster {
 	 */
 	@Override
 	public String getCurrentQuestionText() throws EmptyQuestionListException {
-		// TODO Auto-generated method stub
-		return null;
+		return questions.getCurrentQuestionText();
 	}
 
 	/**
@@ -55,23 +56,19 @@ public class BookQuiz implements QuizMaster {
 	 * * @throws EmptyQuestionListException if there is no current question
 	 */
 	@Override
-	public String[] getCurrentQuestionChoices()
-			throws EmptyQuestionListException {
-		// TODO Auto-generated method stub
-		return null;
+	public String[] getCurrentQuestionChoices() throws EmptyQuestionListException {
+		return questions.getCurrentQuestionChoices();
 	}
 
 	/**
 	 * Process the user's answer to the current question.
-	 * @param answer  the user's answer to the question
+	 * @param answer the user's answer to the question
 	 * @return the graded response to the question
 	 * @throws EmptyQuestionListException if there is no current question
 	 */
 	@Override
-	public String processAnswer(String answer)
-			throws EmptyQuestionListException {
-		// TODO Auto-generated method stub
-		return null;
+	public String processAnswer(String answer) throws EmptyQuestionListException {
+		return questions.processAnswer(answer);
 	}
 
 	/**
@@ -80,8 +77,7 @@ public class BookQuiz implements QuizMaster {
 	 */
 	@Override
 	public int getNumCorrectQuestions() {
-		// TODO Auto-generated method stub
-		return 0;
+		return questions.getNumCorrectAnswers();
 	}
 
 	/**
@@ -90,8 +86,7 @@ public class BookQuiz implements QuizMaster {
 	 */
 	@Override
 	public int getNumAttemptedQuestions() {
-		// TODO Auto-generated method stub
-		return 0;
+		return questions.getNumAttemptedQuestions();
 	}
 	
 	/**
@@ -118,10 +113,24 @@ public class BookQuiz implements QuizMaster {
 	 * @throws IllegalArgumentException if any parameters contain null or empty strings
 	 */
 	@Override
-	public void addStandardQuestion(String questionText,
-			String[] questionChoices, String correctAnswer) {
-		// TODO Auto-generated method stub
+	public void addStandardQuestion(String questionText, String[] questionChoices, String correctAnswer) {
+		//Error Checking
+		if (questionText.isEmpty() || questionText == null || questionChoices == null){
+			throw new IllegalArgumentException();
+		}
+		if (correctAnswer.isEmpty() || correctAnswer == null){
+			throw new IllegalArgumentException();
+		}
+
+		StandardQuestion q = new StandardQuestion();
+		q.setAnswer(correctAnswer);
+		q.setQuestion(questionText);
+		q.setChoiceA(questionChoices[0]);
+		q.setChoiceB(questionChoices[1]);
+		q.setChoiceC(questionChoices[2]);
+		q.setChoiceD(questionChoices[3]);
 		
+		writer.addStandardQuestion(q);
 	}
 
 	/**
@@ -133,9 +142,25 @@ public class BookQuiz implements QuizMaster {
 	 * @throws IllegalArgumentException if any parameters contain null or empty strings
 	 */
 	@Override
-	public void addElementaryQuestion(String questionText,
-			String[] questionChoices, String correctAnswer, String hint) {
-		// TODO Auto-generated method stub
+	public void addElementaryQuestion(String questionText, String[] questionChoices, String correctAnswer, String hint) {
+		//Error Checking
+		if (questionText.isEmpty() || questionText == null || questionChoices == null){
+			throw new IllegalArgumentException();
+		}
+		if (correctAnswer.isEmpty() || correctAnswer == null || hint.isEmpty() || hint == null){
+			throw new IllegalArgumentException();
+		}
+
+		ElementaryQuestion q = new ElementaryQuestion();
+		q.setAnswer(correctAnswer);
+		q.setQuestion(questionText);
+		q.setChoiceA(questionChoices[0]);
+		q.setChoiceB(questionChoices[1]);
+		q.setChoiceC(questionChoices[2]);
+		q.setChoiceD(questionChoices[3]);
+		q.setHint(hint);
+		
+		writer.addElementaryQuestion(q);
 		
 	}
 
@@ -150,8 +175,24 @@ public class BookQuiz implements QuizMaster {
 	@Override
 	public void addAdvancedQuestion(String questionText,
 			String[] questionChoices, String correctAnswer, String comment) {
-		// TODO Auto-generated method stub
-		
+				//Error Checking
+				if (questionText.isEmpty() || questionText == null || questionChoices == null){
+					throw new IllegalArgumentException();
+				}
+				if (correctAnswer.isEmpty() || correctAnswer == null || comment.isEmpty() || comment == null){
+					throw new IllegalArgumentException();
+				}
+
+				AdvancedQuestion q = new AdvancedQuestion();
+				q.setAnswer(correctAnswer);
+				q.setQuestion(questionText);
+				q.setChoiceA(questionChoices[0]);
+				q.setChoiceB(questionChoices[1]);
+				q.setChoiceC(questionChoices[2]);
+				q.setChoiceD(questionChoices[3]);
+				q.setComment(comment);
+				
+				writer.addAdvancedQuestion(q);
 	}
 
 	/**
@@ -162,7 +203,6 @@ public class BookQuiz implements QuizMaster {
 	 */
 	@Override
 	public void writeQuestions(String questionFile) throws QuestionException {
-		// TODO Auto-generated method stub
 		
 	}
 
