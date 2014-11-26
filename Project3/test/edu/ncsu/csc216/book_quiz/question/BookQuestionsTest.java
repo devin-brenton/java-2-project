@@ -101,39 +101,54 @@ public class BookQuestionsTest {
 	 */
 	@Test
 	public void testProcessAnswer() throws EmptyQuestionListException {
+		String qResponse = "";
 		assertTrue(questions.getCurrentQuestionText().equals("Standard Question 1"));
 		
 		//Give correct answer for standard question 1. Next question will be standard
-		questions.processAnswer("d");
-		assertTrue(questions.getCurrentQuestionText().equals("Standard Question 2"));
+		qResponse = questions.processAnswer("d");
+		assertTrue("Expected: Correct! Actual: " + qResponse, qResponse.equals(BookQuestions.CORRECT));
+		assertTrue("Should be Standard Question 2 but was " + questions.getCurrentQuestionText(), questions.getCurrentQuestionText().equals("Standard Question 2"));
 		
 		//Give correct answer for standard question 2. Next question will be advanced
-		questions.processAnswer("c");
+		qResponse = questions.processAnswer("c");
+		assertTrue("Expected: Correct! Actual: " + qResponse, qResponse.equals(BookQuestions.CORRECT));
 		assertTrue(questions.getCurrentQuestionText().equals("Advanced Question 1"));
 		
 		//Give correct answer for advanced question 1. Next question will be advanced
-		questions.processAnswer("d");
-		assertTrue(questions.getCurrentQuestionText().equals("Advanced Question 1")); //The second advanced question is still named Advanced Question 1
+		qResponse = questions.processAnswer("d");
+		assertTrue("Expected: Correct! Great work! Actual: " + qResponse, qResponse.equals(BookQuestions.CORRECT + " Great work!"));
+		assertTrue(questions.getCurrentQuestionText().equals("Advanced Question 2"));
 
 		//Give incorrect answer for advanced question 2. Next question will be standard
-		questions.processAnswer("d");
+		qResponse = questions.processAnswer("d");
+		assertTrue("Expected: Incorrect :( Actual: " + qResponse, qResponse.equals(BookQuestions.INCORRECT));
 		assertTrue(questions.getCurrentQuestionText().equals("Standard Question 3"));
 		
 		//Give incorrect answer for standard question 3. Next question will be elementary
-		questions.processAnswer("d");
+		qResponse = questions.processAnswer("d");
+		assertTrue("Expected: Incorrect :( Actual: " + qResponse, qResponse.equals(BookQuestions.INCORRECT));
 		assertTrue(questions.getCurrentQuestionText().equals("Elementary Question 1"));
 		
 		//Give incorrect answer for elementary question 1. Next question will be the same question
-		questions.processAnswer("a");
+		qResponse = questions.processAnswer("a");
+		assertTrue("Expected: Incorrect :( Here is a hint. The correct answer is d. Actual: " + qResponse, 
+				qResponse.equals(BookQuestions.INCORRECT + " Here is a hint. The correct answer is d."));
 		assertTrue(questions.getCurrentQuestionText().equals("Elementary Question 1"));
 		
 		//Give correct answer for elementary question 1. Next question will be elementary
-		questions.processAnswer("d");
+		qResponse = questions.processAnswer("d");
+		assertTrue("Expected: Correct! Actual: " + qResponse, qResponse.equals(BookQuestions.CORRECT));
 		assertTrue(questions.getCurrentQuestionText().equals("Elementary Question 2"));
 		
-		//Give correct answer for elementary question 2. 
+		//Give correct answer for elementary question 2. Next question will be elementary
+		qResponse = questions.processAnswer("c");
+		assertTrue("Expected: Correct! Actual: " + qResponse, qResponse.equals(BookQuestions.CORRECT));
+		assertTrue(questions.getCurrentQuestionText().equals("Elementary Question 3"));
+		
+		//Give correct answer for elementary question 3. 
 		//Next question should be standard but there are none left so exception will be thrown
-		questions.processAnswer("c");
+		qResponse = questions.processAnswer("a");
+		assertTrue("Expected: Correct! Actual: " + qResponse, qResponse.equals(BookQuestions.CORRECT));
 		try {
 			questions.getCurrentQuestionText();
 			fail();
@@ -177,16 +192,20 @@ public class BookQuestionsTest {
 		questions.processAnswer("d");
 		assertEquals(questions.getNumCorrectAnswers(), 4);
 		
-		//Give correct answer for elementary question 2. 
-		//Next question should be standard but there are none left
+		//Give correct answer for elementary question 2. Next question will be elementary
 		questions.processAnswer("c");
 		assertEquals(questions.getNumCorrectAnswers(), 5);
+		
+		//Give correct answer for elementary question 3. 
+		//Next question should be standard but there are none left
+		questions.processAnswer("a");
+		assertEquals(questions.getNumCorrectAnswers(), 6);
 		
 		try {
 			questions.processAnswer("a");
 			fail();
 		} catch (EmptyQuestionListException e) {
-			assertEquals(questions.getNumCorrectAnswers(), 5);
+			assertEquals(questions.getNumCorrectAnswers(), 6);
 		}
 	}
 
@@ -223,11 +242,15 @@ public class BookQuestionsTest {
 		
 		//Give correct answer for elementary question 1. Next question will be elementary
 		questions.processAnswer("d");
-		assertEquals(questions.getNumAttemptedQuestions(), 7);
+		assertEquals(questions.getNumAttemptedQuestions(), 6);
 		
-		//Give correct answer for elementary question 2. 
-		//Next question should be standard but there are none left
+		//Give correct answer for elementary question 2. Next question will be elementary
 		questions.processAnswer("c");
+		assertEquals(questions.getNumAttemptedQuestions(), 7);
+				
+		//Give correct answer for elementary question 3. 
+		//Next question should be standard but there are none left
+		questions.processAnswer("a");
 		assertEquals(questions.getNumAttemptedQuestions(), 8);
 		
 		try {
@@ -331,7 +354,7 @@ public class BookQuestionsTest {
 		
 		//Give correct answer for Elementary Question 3. Next question will be elementary
 		questions.processAnswer("a");
-		assertTrue(questions.getCurrentQuestionText().equals("Elementary Question 4"));
+		assertTrue("Expected: Elementary Question 4 Actual: " + questions.getCurrentQuestionText(), questions.getCurrentQuestionText().equals("Elementary Question 4"));
 		
 		//Give incorrect answer for Elementary Question 4. Next question will be the same question
 		questions.processAnswer("a");

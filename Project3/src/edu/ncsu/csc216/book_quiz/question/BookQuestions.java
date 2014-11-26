@@ -184,6 +184,8 @@ public class BookQuestions {
 		 */
 		public ElementaryQuestionState(List<ElementaryQuestion> list) {
 			super(new ArrayList<Question>(list));
+			attempts = 0;
+			numCorrectInRow = 0;
 		}
 
 		/**
@@ -191,12 +193,39 @@ public class BookQuestions {
 		 * a hint is displayed and the question is asked again. If two ElementaryQuestion are answered correctly
 		 * in a row, the state is set to StandardQuestionState.
 		 * @param answer answer to be processed
+		 * @return Response to the user's answer
 		 * @throws EmptyQuestionListExceptions if currentQuestion is null.
 		 */
 		@Override
-		public String processAnswer(String answer) {
-			// TODO Auto-generated method stub
-			return null;
+		public String processAnswer(String answer) throws EmptyQuestionListException {
+			if(super.getCurrentQuestion() == null) {
+				throw new EmptyQuestionListException();
+			} else if(super.getCurrentQuestionAnswer().equals(answer)) {
+				if(attempts == 0) {
+					numCorrectInRow++;
+					numAttemptQuests++;
+				} else {
+					attempts = 0;
+				}
+				numCorrectAnswers++;
+				if(numCorrectInRow == 2) {
+					numCorrectInRow = 0;
+					state = stdState;
+				}
+				super.nextQuestion();
+				return CORRECT;
+			} else {
+				numCorrectInRow = 0;
+				if(attempts == 0) {
+					numAttemptQuests++;
+					attempts++;
+					return INCORRECT + SEPARATOR + ((ElementaryQuestion) super.getCurrentQuestion()).getHint();
+				} else {
+					attempts = 0;
+					super.nextQuestion();
+					return INCORRECT;
+				}
+			}
 		}
 		
 	}
@@ -217,6 +246,7 @@ public class BookQuestions {
 		 */
 		public StandardQuestionState(List<StandardQuestion> list) {
 			super(new ArrayList<Question>(list));
+			numCorrectInRow = 0;
 		}
 
 		/**
@@ -224,12 +254,30 @@ public class BookQuestions {
 		 * the state is set to ElementaryQuestionState. If two StandardQuestions are answered correctly
 		 * in a row, the state is set to AdvancedQuestionState.
 		 * @param answer answer to be processed
+		 * @return Response to the user's answer
 		 * @throws EmptyQuestionListExceptions if currentQuestion is null.
 		 */
 		@Override
-		public String processAnswer(String answer) {
-			// TODO Auto-generated method stub
-			return null;
+		public String processAnswer(String answer) throws EmptyQuestionListException {
+			if(super.getCurrentQuestion() == null) {
+				throw new EmptyQuestionListException();
+			} else if(super.getCurrentQuestionAnswer().equals(answer)) {
+				numCorrectInRow++;
+				numCorrectAnswers++;
+				numAttemptQuests++;
+				if(numCorrectInRow == 2) {
+					numCorrectInRow = 0;
+					state = advState;
+				}
+				super.nextQuestion();
+				return CORRECT;
+			} else {
+				numCorrectInRow = 0;
+				numAttemptQuests++;
+				state = elemState;
+				super.nextQuestion();
+				return INCORRECT;
+			}
 		}
 		
 	}
@@ -254,12 +302,25 @@ public class BookQuestions {
 		 * the state is set to StandardQuestionState. If an AdvancedQuestion is answered correctly a 
 		 * congratulatory message is displayed.
 		 * @param answer answer to be processed
+		 * @return Response to the user's answer
 		 * @throws EmptyQuestionListExceptions if currentQuestion is null.
 		 */
 		@Override
-		public String processAnswer(String answer) {
-			// TODO Auto-generated method stub
-			return null;
+		public String processAnswer(String answer) throws EmptyQuestionListException {
+			if(super.getCurrentQuestion() == null) {
+				throw new EmptyQuestionListException();
+			} else if(super.getCurrentQuestionAnswer().equals(answer)) {
+				numCorrectAnswers++;
+				numAttemptQuests++;
+				String comment = ((AdvancedQuestion) super.getCurrentQuestion()).getComment();
+				super.nextQuestion();
+				return CORRECT + SEPARATOR + comment;
+			} else {
+				numAttemptQuests++;
+				state = stdState;
+				super.nextQuestion();
+				return INCORRECT;
+			}
 		}
 		
 	}

@@ -52,7 +52,7 @@ public abstract class QuestionState {
 	 * @return appropriate response to the answer choice (i.e. "Correct!")
 	 * @throws EmptyQuestionListExceptions if currentQuestion is null.
 	 */
-	public abstract String processAnswer(String answer);
+	public abstract String processAnswer(String answer) throws EmptyQuestionListException;
 
 	/**
 	 * True if currentQuestion is not null or waitingQuestions is not empty.
@@ -123,6 +123,7 @@ public abstract class QuestionState {
 	public void nextQuestion() {
 		if(currentQuestion != null) {
 			askedQuestions.add(currentQuestion);
+			waitingQuestions.remove(FRONT);
 		}
 		if(waitingQuestions.size() == 0) {
 			currentQuestion = null;
