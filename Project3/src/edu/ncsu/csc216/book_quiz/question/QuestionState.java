@@ -1,5 +1,6 @@
 package edu.ncsu.csc216.book_quiz.question;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.ncsu.csc216.book_quiz.util.EmptyQuestionListException;
@@ -38,6 +39,8 @@ public abstract class QuestionState {
 	 */
 	public QuestionState(List<Question> list) {
 		waitingQuestions = list;
+		askedQuestions = new ArrayList<Question>();
+		nextQuestion();
 	}
 
 	/**
@@ -56,7 +59,7 @@ public abstract class QuestionState {
 	 * @return True if currentQuestion is not null or waitingQuestions is not empty.
 	 */
 	public boolean hasMoreQuestions() {
-		
+		return currentQuestion != null || waitingQuestions.size() != 0;
 	}
 	
 	/**
@@ -64,8 +67,11 @@ public abstract class QuestionState {
 	 * @return question text
 	 * @throws EmptyQuestionListException if currentQuestion is null
 	 */
-	public String getCurrentQuestionText() {
-		
+	public String getCurrentQuestionText() throws EmptyQuestionListException {
+		if(currentQuestion == null) {
+			throw new EmptyQuestionListException();
+		}
+		return currentQuestion.getQuestion();
 	}
 
 	/**
@@ -73,8 +79,16 @@ public abstract class QuestionState {
 	 * @return array of four question choices
 	 * @throws EmptyQuestionListException if currentQuestion is null
 	 */
-	public String[] getCurrentQuestionChoices() {
-		
+	public String[] getCurrentQuestionChoices() throws EmptyQuestionListException {
+		if(currentQuestion == null) {
+			throw new EmptyQuestionListException();
+		}
+		String[] choices = new String[4];
+		choices[0] = currentQuestion.getChoiceA();
+		choices[1] = currentQuestion.getChoiceB();
+		choices[2] = currentQuestion.getChoiceC();
+		choices[3] = currentQuestion.getChoiceD();
+		return choices;
 	}
 
 	/**
@@ -82,8 +96,11 @@ public abstract class QuestionState {
 	 * @return question answer
 	 * @throws EmptyQuestionListException if currentQuestion is null
 	 */
-	public String getCurrentQuestionAnswer() {
-		
+	public String getCurrentQuestionAnswer() throws EmptyQuestionListException {
+		if(currentQuestion == null) {
+			throw new EmptyQuestionListException();
+		}
+		return currentQuestion.getAnswer();
 	}
 
 	/**
@@ -91,17 +108,27 @@ public abstract class QuestionState {
 	 * @return current question
 	 * @throws EmptyQuestionListException if currentQuestion is null
 	 */
-	public Question getCurrentQuestion() {
-		
+	public Question getCurrentQuestion() throws EmptyQuestionListException {
+		if(currentQuestion == null) {
+			throw new EmptyQuestionListException();
+		}
+		return currentQuestion;
 	}
 	
 	/**
 	 * Sets currentQuestion to the next item in the waitingQuestions list, or null 
-	 * if there are no more questions in the list. The currentQuestion is added to 
+	 * if there are no more questions in the list. The previous currentQuestion is added to 
 	 * the end of the askedQuestions list.
 	 */
 	public void nextQuestion() {
-		
+		if(currentQuestion != null) {
+			askedQuestions.add(currentQuestion);
+		}
+		if(waitingQuestions.size() == 0) {
+			currentQuestion = null;
+		} else {
+			currentQuestion = waitingQuestions.get(FRONT);
+		}
 	}
 	
 	/**
@@ -111,7 +138,10 @@ public abstract class QuestionState {
 	 * @param q new question
 	 */
 	public void addQuestion(Question q) {
-		
+		waitingQuestions.add(q);
+		if(currentQuestion == null) {
+			nextQuestion();
+		}
 	}
 	
 	/**
@@ -121,6 +151,9 @@ public abstract class QuestionState {
 	 * @return the joint list of questions
 	 */
 	public List<Question> getQuestions() {
-		
+		List<Question> allQuestions = new ArrayList<Question>();
+		allQuestions.addAll(askedQuestions);
+		allQuestions.addAll(waitingQuestions);
+		return allQuestions;
 	}
 }

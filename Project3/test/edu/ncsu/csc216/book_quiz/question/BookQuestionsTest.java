@@ -55,20 +55,20 @@ public class BookQuestionsTest {
 		assertEquals(questions.getNumAttemptedQuestions(), 0);
 		assertEquals(questions.getNumAttemptedQuestions(), 0);
 		
-		standard = null;
-		elementary = null;
-		advanced = null;
-		BookQuestions nullQuestions = new BookQuestions(standard, elementary, advanced);
-		assertEquals(standard, questions.getStandardQuestions());
-		assertEquals(elementary, questions.getElementaryQuestions());
-		assertEquals(advanced, questions.getAdvancedQuestions());
-		assertFalse(questions.hasMoreQuestions());
-		assertEquals(questions.getNumAttemptedQuestions(), 0);
-		assertEquals(questions.getNumAttemptedQuestions(), 0);
+//		standard = null;
+//		elementary = null;
+//		advanced = null;
+//		BookQuestions nullQuestions = new BookQuestions(standard, elementary, advanced);
+//		assertEquals(standard, nullQuestions.getStandardQuestions());
+//		assertEquals(elementary, nullQuestions.getElementaryQuestions());
+//		assertEquals(advanced, nullQuestions.getAdvancedQuestions());
+//		assertFalse(questions.hasMoreQuestions());
+//		assertEquals(questions.getNumAttemptedQuestions(), 0);
+//		assertEquals(questions.getNumAttemptedQuestions(), 0);
 	}
 
 	@Test
-	public void testGetCurrentQuestionText() {
+	public void testGetCurrentQuestionText() throws EmptyQuestionListException {
 		assertTrue(questions.getCurrentQuestionText().equals("Standard Question 1"));
 		//Give correct answer for standard question 1. Next question will be standard
 		questions.processAnswer("d");
@@ -81,7 +81,7 @@ public class BookQuestionsTest {
 	 * Makes sure that the question choices are returned in the correct order
 	 */
 	@Test
-	public void testGetCurrentQuestionChoices() {
+	public void testGetCurrentQuestionChoices() throws EmptyQuestionListException {
 		String[] choices = new String[4];
 		choices[0] = "Choice a";
 		choices[1] = "Choice b";
@@ -100,7 +100,7 @@ public class BookQuestionsTest {
 	 * Tests the FSM pattern for deciding which level difficulty question to ask next as defined by UC7, S1
 	 */
 	@Test
-	public void testProcessAnswer() {
+	public void testProcessAnswer() throws EmptyQuestionListException {
 		assertTrue(questions.getCurrentQuestionText().equals("Standard Question 1"));
 		
 		//Give correct answer for standard question 1. Next question will be standard
@@ -146,7 +146,7 @@ public class BookQuestionsTest {
 	 * Test that BookQuestions correctly counts the number of correctly answered questions
 	 */
 	@Test
-	public void testGetNumCorrectQuestions() {
+	public void testGetNumCorrectQuestions() throws EmptyQuestionListException {
 		assertEquals(questions.getNumCorrectAnswers(), 0);
 		
 		//Give correct answer for standard question 1. Next question will be standard
@@ -181,13 +181,20 @@ public class BookQuestionsTest {
 		//Next question should be standard but there are none left
 		questions.processAnswer("c");
 		assertEquals(questions.getNumCorrectAnswers(), 5);
+		
+		try {
+			questions.processAnswer("a");
+			fail();
+		} catch (EmptyQuestionListException e) {
+			assertEquals(questions.getNumCorrectAnswers(), 5);
+		}
 	}
 
 	/**
 	 * Test that BookQuestions correctly counts the number of questions attempted
 	 */
 	@Test
-	public void testGetNumAttemptedQuestions() {
+	public void testGetNumAttemptedQuestions() throws EmptyQuestionListException {
 		assertEquals(questions.getNumAttemptedQuestions(), 0);
 		
 		//Give correct answer for standard question 1. Next question will be standard
@@ -222,13 +229,20 @@ public class BookQuestionsTest {
 		//Next question should be standard but there are none left
 		questions.processAnswer("c");
 		assertEquals(questions.getNumAttemptedQuestions(), 8);
+		
+		try {
+			questions.processAnswer("a");
+			fail();
+		} catch (EmptyQuestionListException e) {
+			assertEquals(questions.getNumAttemptedQuestions(), 8);
+		}
 	}
 
 	/**
 	 * Test the functionality of adding standard questions to BookQuestions
 	 */
 	@Test
-	public void testAddStandardQuestion() {
+	public void testAddStandardQuestion() throws EmptyQuestionListException {
 		StandardQuestion q = new StandardQuestion();
 		q.setQuestion("Standard Question");
 		q.setChoiceA("a");
@@ -286,7 +300,7 @@ public class BookQuestionsTest {
 	 * Test the functionality of adding elementary questions to BookQuestions
 	 */
 	@Test
-	public void testAddElementaryQuestion() {
+	public void testAddElementaryQuestion() throws EmptyQuestionListException {
 		ElementaryQuestion q = new ElementaryQuestion();
 		q.setQuestion("Elementary Question");
 		q.setChoiceA("a");
@@ -352,7 +366,7 @@ public class BookQuestionsTest {
 	 * Test the functionality of adding advanced questions to BookQuestions
 	 */
 	@Test
-	public void testAddAdvancedQuestion() {
+	public void testAddAdvancedQuestion() throws EmptyQuestionListException {
 		AdvancedQuestion q = new AdvancedQuestion();
 		q.setQuestion("Advanced Question");
 		q.setChoiceA("a");

@@ -3,6 +3,7 @@
  */
 package edu.ncsu.csc216.book_quiz.question;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.ncsu.csc216.question_library.*;
@@ -65,7 +66,7 @@ public class BookQuestions {
 	 * @return True if there are any more questions remaining in the quiz
 	 */
 	public boolean hasMoreQuestions() {
-		
+		return state.hasMoreQuestions();
 	}
 	
 	/**
@@ -73,8 +74,8 @@ public class BookQuestions {
 	 * @return text of the question
 	 * @throws EmptyQuestionListException if currentQuestion is null
 	 */
-	public String getCurrentQuestionText() {
-		
+	public String getCurrentQuestionText() throws EmptyQuestionListException {
+		return state.getCurrentQuestionText();
 	}
 	
 	/**
@@ -82,8 +83,8 @@ public class BookQuestions {
 	 * @return array of four possible question choices
 	 * @throws EmptyQuestionListException if currentQuestion is null
 	 */
-	public String[] getCurrentQuestionChoices() {
-		
+	public String[] getCurrentQuestionChoices() throws EmptyQuestionListException {
+		return state.getCurrentQuestionChoices();
 	}
 	
 	/**
@@ -93,7 +94,7 @@ public class BookQuestions {
 	 * @return the appropriate response depending on the answer (i.e. "Correct!")
 	 * @throws EmptyQuestionListException if the answer cannot be processed.
 	 */
-	public String processAnswer(String answer) {
+	public String processAnswer(String answer) throws EmptyQuestionListException {
 		return state.processAnswer(answer);
 	}
 	
@@ -118,7 +119,7 @@ public class BookQuestions {
 	 * @param quest question to be added
 	 */
 	public void addStandardQuestion(StandardQuestion quest) {
-		
+		stdState.addQuestion(quest);
 	}
 	
 	/**
@@ -126,7 +127,7 @@ public class BookQuestions {
 	 * @param quest question to be added
 	 */
 	public void addElementaryQuestion(ElementaryQuestion quest) {
-		
+		elemState.addQuestion(quest);
 	}
 	
 	/**
@@ -134,7 +135,7 @@ public class BookQuestions {
 	 * @param quest question to be added
 	 */
 	public void addAdvancedQuestion(AdvancedQuestion quest) {
-		
+		advState.addQuestion(quest);
 	}
 	
 	/**
@@ -142,7 +143,7 @@ public class BookQuestions {
 	 * @return collection of standard questions
 	 */
 	public List<Question> getStandardQuestions() {
-		
+		return stdState.getQuestions();
 	}
 	
 	/**
@@ -150,7 +151,7 @@ public class BookQuestions {
 	 * @return collection of elementary questions
 	 */
 	public List<Question> getElementaryQuestions() {
-		
+		return elemState.getQuestions();
 	}
 	
 	/**
@@ -158,7 +159,7 @@ public class BookQuestions {
 	 * @return collection of advanced questions
 	 */
 	public List<Question> getAdvancedQuestions() {
-		
+		return advState.getQuestions();
 	}
 	
 //----------------------------------------------------------------------------//
@@ -182,7 +183,7 @@ public class BookQuestions {
 		 * @param list list of elementary questions
 		 */
 		public ElementaryQuestionState(List<ElementaryQuestion> list) {
-			super(list);
+			super(new ArrayList<Question>(list));
 		}
 
 		/**
@@ -214,8 +215,8 @@ public class BookQuestions {
 		 * Constructor - stores the parameter list as a list of waiting standard questions (questions yet to be asked).
 		 * @param list list of standard questions
 		 */
-		public StandardQuestionState(List<Question> list) {
-			super(list);
+		public StandardQuestionState(List<StandardQuestion> list) {
+			super(new ArrayList<Question>(list));
 		}
 
 		/**
@@ -245,7 +246,7 @@ public class BookQuestions {
 		 * @param list list of advanced questions
 		 */
 		public AdvancedQuestionState(List<AdvancedQuestion> list) {
-			super(list);
+			super(new ArrayList<Question>(list));
 		}
 
 		/**
