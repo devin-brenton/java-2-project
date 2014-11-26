@@ -155,6 +155,13 @@ public class BookQuestionsTest {
 		} catch (EmptyQuestionListException e) {
 			assertTrue(e.getMessage().equals("There are no more questions available."));
 		}
+		
+		try {
+			questions.processAnswer("a");
+			fail();
+		} catch (EmptyQuestionListException e) {
+			assertTrue(e.getMessage().equals("There are no more questions available."));
+		}
 	}
 
 	/**
