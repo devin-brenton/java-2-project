@@ -11,6 +11,11 @@ import edu.ncsu.csc216.question_library.*;
 import edu.ncsu.csc216.book_quiz.*;
 import edu.ncsu.csc216.book_quiz.util.EmptyQuestionListException;
 
+/**
+ * Tests the functionality and construction of BookQuestions, a class for storing and determining the questions in a quiz
+ * @author Devin Brenton
+ *
+ */
 public class BookQuestionsTest {
 	
 	/** questions1.xml - A valid questions file with 3 standard questions, 4 elementary questions, and 2 advanced questions. */

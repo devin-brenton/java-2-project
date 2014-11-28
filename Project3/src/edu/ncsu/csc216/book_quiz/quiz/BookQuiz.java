@@ -1,5 +1,7 @@
 package edu.ncsu.csc216.book_quiz.quiz;
 
+import java.util.List;
+
 import edu.ncsu.csc216.book_quiz.question.BookQuestions;
 import edu.ncsu.csc216.book_quiz.util.EmptyQuestionListException;
 import edu.ncsu.csc216.question_library.*;
@@ -24,9 +26,8 @@ public class BookQuiz implements QuizMaster {
 	 * @param fileName name of XML file containing the questions
 	 */
 	public BookQuiz(String fileName) throws QuestionException {
-		this.reader = new QuestionReader(fileName);
-		this.writer = new QuestionWriter(fileName);
-		this.questions = new BookQuestions(reader.getStandardQuestions(), reader.getElementaryQuestions(), 
+		reader = new QuestionReader(fileName);
+		questions = new BookQuestions(reader.getStandardQuestions(), reader.getElementaryQuestions(), 
 						reader.getAdvancedQuestions());
 	}
 	
@@ -81,7 +82,7 @@ public class BookQuiz implements QuizMaster {
 	}
 
 	/**
-	 * How many questions has the user attempted to answer.
+	 * How many questions has the user attempted to answer?
 	 * @return the number of attempts
 	 */
 	@Override
@@ -92,17 +93,29 @@ public class BookQuiz implements QuizMaster {
 	/**
 	 * Helper method
 	 * @param s string to validate
+	 * @throws IllegalArgumentException if any parameters contain null or empty strings
 	 */
 	private void validateString(String s) {
-		
+		if(s == null || s.equals("")) {
+			throw new IllegalArgumentException();
+		}
 	}
 	
 	/**
 	 * Helper method
 	 * @param array array to validate
+	 * @throws IllegalArgumentException if any parameters contain null or empty strings
 	 */
 	private void validateStringArray(String[] array) {
-		
+		if(array == null) {
+			throw new IllegalArgumentException();
+		} else {
+			for(int i = 0; i < array.length; i++) {
+				if(array[i] == null || array[i].equals("")) {
+					throw new IllegalArgumentException();
+				}
+			}
+		}
 	}
 
 	/**
@@ -115,12 +128,9 @@ public class BookQuiz implements QuizMaster {
 	@Override
 	public void addStandardQuestion(String questionText, String[] questionChoices, String correctAnswer) {
 		//Error Checking
-		if (questionText.isEmpty() || questionText == null || questionChoices == null){
-			throw new IllegalArgumentException();
-		}
-		if (correctAnswer.isEmpty() || correctAnswer == null){
-			throw new IllegalArgumentException();
-		}
+		validateString(questionText);
+		validateStringArray(questionChoices);
+		validateString(correctAnswer);
 
 		StandardQuestion q = new StandardQuestion();
 		q.setAnswer(correctAnswer);
@@ -130,7 +140,7 @@ public class BookQuiz implements QuizMaster {
 		q.setChoiceC(questionChoices[2]);
 		q.setChoiceD(questionChoices[3]);
 		
-		writer.addStandardQuestion(q);
+		questions.addStandardQuestion(q);
 	}
 
 	/**
@@ -144,12 +154,10 @@ public class BookQuiz implements QuizMaster {
 	@Override
 	public void addElementaryQuestion(String questionText, String[] questionChoices, String correctAnswer, String hint) {
 		//Error Checking
-		if (questionText.isEmpty() || questionText == null || questionChoices == null){
-			throw new IllegalArgumentException();
-		}
-		if (correctAnswer.isEmpty() || correctAnswer == null || hint.isEmpty() || hint == null){
-			throw new IllegalArgumentException();
-		}
+		validateString(questionText);
+		validateStringArray(questionChoices);
+		validateString(correctAnswer);
+		validateString(hint);
 
 		ElementaryQuestion q = new ElementaryQuestion();
 		q.setAnswer(correctAnswer);
@@ -160,7 +168,7 @@ public class BookQuiz implements QuizMaster {
 		q.setChoiceD(questionChoices[3]);
 		q.setHint(hint);
 		
-		writer.addElementaryQuestion(q);
+		questions.addElementaryQuestion(q);
 		
 	}
 
@@ -175,24 +183,22 @@ public class BookQuiz implements QuizMaster {
 	@Override
 	public void addAdvancedQuestion(String questionText,
 			String[] questionChoices, String correctAnswer, String comment) {
-				//Error Checking
-				if (questionText.isEmpty() || questionText == null || questionChoices == null){
-					throw new IllegalArgumentException();
-				}
-				if (correctAnswer.isEmpty() || correctAnswer == null || comment.isEmpty() || comment == null){
-					throw new IllegalArgumentException();
-				}
+		//Error Checking
+		validateString(questionText);
+		validateStringArray(questionChoices);
+		validateString(correctAnswer);
+		validateString(comment);
 
-				AdvancedQuestion q = new AdvancedQuestion();
-				q.setAnswer(correctAnswer);
-				q.setQuestion(questionText);
-				q.setChoiceA(questionChoices[0]);
-				q.setChoiceB(questionChoices[1]);
-				q.setChoiceC(questionChoices[2]);
-				q.setChoiceD(questionChoices[3]);
-				q.setComment(comment);
-				
-				writer.addAdvancedQuestion(q);
+		AdvancedQuestion q = new AdvancedQuestion();
+		q.setAnswer(correctAnswer);
+		q.setQuestion(questionText);
+		q.setChoiceA(questionChoices[0]);
+		q.setChoiceB(questionChoices[1]);
+		q.setChoiceC(questionChoices[2]);
+		q.setChoiceD(questionChoices[3]);
+		q.setComment(comment);
+		
+		questions.addAdvancedQuestion(q);
 	}
 
 	/**
@@ -203,7 +209,25 @@ public class BookQuiz implements QuizMaster {
 	 */
 	@Override
 	public void writeQuestions(String questionFile) throws QuestionException {
+		writer = new QuestionWriter(questionFile);
+
+		List<Question> standard = questions.getStandardQuestions();
+		List<Question> elementary = questions.getElementaryQuestions();
+		List<Question> advanced = questions.getAdvancedQuestions();
 		
+		for(int i = 0; i < standard.size(); i++) {
+			writer.addStandardQuestion((StandardQuestion) standard.get(i));
+		}
+		
+		for(int i = 0; i < elementary.size(); i++) {
+			writer.addElementaryQuestion((ElementaryQuestion) elementary.get(i));
+		}
+
+		for(int i = 0; i < advanced.size(); i++) {
+			writer.addAdvancedQuestion((AdvancedQuestion) advanced.get(i));
+		}
+		
+		writer.marshal();
 	}
 
 }
