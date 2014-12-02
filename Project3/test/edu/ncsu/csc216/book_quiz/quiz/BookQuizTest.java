@@ -362,10 +362,22 @@ public class BookQuizTest {
 	@Test
 	public void testWriteQuestions() throws QuestionException {
 		quiz.writeQuestions("questions_new.xml");
-		QuestionReader copyOfQuiz = new QuestionReader("questions1.xml");
-		assertTrue(standard.equals(copyOfQuiz.getStandardQuestions()));
-		assertTrue(elementary.equals(copyOfQuiz.getElementaryQuestions()));
-		assertTrue(advanced.equals(copyOfQuiz.getAdvancedQuestions()));
+		QuestionReader copyOfQuiz = new QuestionReader("questions_new.xml");
+		
+		//Assert Loop to compare question (string) with Standard List's question at i
+		for (int i = 0; i < standard.size(); i++) {
+			assertTrue(standard.get(i).getQuestion().equals(copyOfQuiz.getStandardQuestions().get(i)));
+		}
+		
+		//Assert Loop to compare question (string) with Elementary List's question at i
+		for (int i = 0; i < elementary.size(); i++) {
+			assertTrue(elementary.get(i).getQuestion().equals(copyOfQuiz.getElementaryQuestions().get(i)));
+		}
+		
+		//Assert Loop to compare question (string) with Elementary List's question at i
+		for (int i = 0; i < advanced.size(); i++) {
+			assertTrue(advanced.get(i).getQuestion().equals(copyOfQuiz.getAdvancedQuestions().get(i)));
+		}
 	}
 
 }
