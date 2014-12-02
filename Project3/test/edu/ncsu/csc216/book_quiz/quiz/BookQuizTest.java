@@ -55,6 +55,7 @@ public class BookQuizTest {
 	
 	/**
 	 * @throws java.lang.Exception
+	 * Sets up Book Quiz Test objects used in testing
 	 */
 	@Before
 	public void setUp() throws Exception {
