@@ -349,10 +349,6 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 		pnlCard.add(pnlTakeQuiz, TAKE_QUIZ);		
 	}
 	
-	private void enableDisable() {
-		
-	}
-	
 	public static void main(String[] args) {
 		try {
 			if (args.length > 0)
