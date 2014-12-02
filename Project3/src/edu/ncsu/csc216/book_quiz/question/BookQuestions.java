@@ -102,7 +102,7 @@ public class BookQuestions {
 	 * Returns the number of questions that have been correctly answered.
 	 * @return number of correct answers
 	 */
-	public int getNumCorrectAnswers() {
+	public int getNumCorrectQuestions() {
 		return numCorrectAnswers;
 	}
 	

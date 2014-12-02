@@ -83,7 +83,7 @@ public class BookQuiz implements QuizMaster {
 	 */
 	@Override
 	public int getNumCorrectQuestions() {
-		return questions.getNumCorrectAnswers();
+		return questions.getNumCorrectQuestions();
 	}
 
 	/**

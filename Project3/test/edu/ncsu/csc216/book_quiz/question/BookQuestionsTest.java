@@ -174,50 +174,50 @@ public class BookQuestionsTest {
 	 */
 	@Test
 	public void testGetNumCorrectQuestions() throws EmptyQuestionListException {
-		assertEquals(questions.getNumCorrectAnswers(), 0);
+		assertEquals(questions.getNumCorrectQuestions(), 0);
 		
 		//Give correct answer for standard question 1. Next question will be standard
 		questions.processAnswer("d");
-		assertEquals(questions.getNumCorrectAnswers(), 1);
+		assertEquals(questions.getNumCorrectQuestions(), 1);
 		
 		//Give correct answer for standard question 2. Next question will be advanced
 		questions.processAnswer("c");
-		assertEquals(questions.getNumCorrectAnswers(), 2);
+		assertEquals(questions.getNumCorrectQuestions(), 2);
 		
 		//Give correct answer for advanced question 1. Next question will be advanced
 		questions.processAnswer("d");
-		assertEquals(questions.getNumCorrectAnswers(), 3);
+		assertEquals(questions.getNumCorrectQuestions(), 3);
 
 		//Give incorrect answer for advanced question 2. Next question will be standard
 		questions.processAnswer("d");
-		assertEquals(questions.getNumCorrectAnswers(), 3);
+		assertEquals(questions.getNumCorrectQuestions(), 3);
 		
 		//Give incorrect answer for standard question 3. Next question will be elementary
 		questions.processAnswer("d");
-		assertEquals(questions.getNumCorrectAnswers(), 3);
+		assertEquals(questions.getNumCorrectQuestions(), 3);
 		
 		//Give incorrect answer for elementary question 1. Next question will be the same question
 		questions.processAnswer("a");
-		assertEquals(questions.getNumCorrectAnswers(), 3);
+		assertEquals(questions.getNumCorrectQuestions(), 3);
 		
 		//Give correct answer for elementary question 1. Next question will be elementary
 		questions.processAnswer("d");
-		assertEquals(questions.getNumCorrectAnswers(), 4);
+		assertEquals(questions.getNumCorrectQuestions(), 4);
 		
 		//Give correct answer for elementary question 2. Next question will be elementary
 		questions.processAnswer("c");
-		assertEquals(questions.getNumCorrectAnswers(), 5);
+		assertEquals(questions.getNumCorrectQuestions(), 5);
 		
 		//Give correct answer for elementary question 3. 
 		//Next question should be standard but there are none left
 		questions.processAnswer("a");
-		assertEquals(questions.getNumCorrectAnswers(), 6);
+		assertEquals(questions.getNumCorrectQuestions(), 6);
 		
 		try {
 			questions.processAnswer("a");
 			fail();
 		} catch (EmptyQuestionListException e) {
-			assertEquals(questions.getNumCorrectAnswers(), 6);
+			assertEquals(questions.getNumCorrectQuestions(), 6);
 		}
 	}
 
