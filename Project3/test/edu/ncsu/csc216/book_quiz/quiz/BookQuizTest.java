@@ -28,7 +28,7 @@ import edu.ncsu.csc216.question_library.StandardQuestion;
  */
 public class BookQuizTest {
 	/** questions1.xml - A valid questions file with 3 standard questions, 4 elementary questions, and 2 advanced questions. */
-	private static final String FILE_NAME = "testFiles/questions1.xml";
+	private static final String FILE_NAME = "questions1.xml";
 	
 	
 	/** BookQuiz object for testing */
@@ -361,8 +361,8 @@ public class BookQuizTest {
 	 */
 	@Test
 	public void testWriteQuestions() throws QuestionException {
-		quiz.writeQuestions("questions_new");
-		QuestionReader copyOfQuiz = new QuestionReader("questions_new");
+		quiz.writeQuestions("questions_new.xml");
+		QuestionReader copyOfQuiz = new QuestionReader("questions_new.xml");
 		assertTrue(standard.equals(copyOfQuiz.getStandardQuestions()));
 		assertTrue(elementary.equals(copyOfQuiz.getElementaryQuestions()));
 		assertTrue(advanced.equals(copyOfQuiz.getAdvancedQuestions()));

@@ -6,6 +6,11 @@ import edu.ncsu.csc216.book_quiz.question.BookQuestions;
 import edu.ncsu.csc216.book_quiz.util.EmptyQuestionListException;
 import edu.ncsu.csc216.question_library.*;
 
+/**
+ * Serves as an interface for taking quizzes on book trivia.
+ * @author Devin Brenton
+ *
+ */
 public class BookQuiz implements QuizMaster {
 	
 	/** Contains the question for quizzing */

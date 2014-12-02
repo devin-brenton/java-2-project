@@ -50,7 +50,7 @@ public abstract class QuestionState {
 	 * should happen in each concrete state is defined in UC7, S1.
 	 * @param answer the user's answer
 	 * @return appropriate response to the answer choice (i.e. "Correct!")
-	 * @throws EmptyQuestionListExceptions if currentQuestion is null.
+	 * @throws EmptyQuestionListException if currentQuestion is null.
 	 */
 	public abstract String processAnswer(String answer) throws EmptyQuestionListException;
 
