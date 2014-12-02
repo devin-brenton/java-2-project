@@ -54,7 +54,6 @@ public class BookQuiz implements QuizMaster {
 	public String getCurrentQuestionText() throws EmptyQuestionListException {
 		return questions.getCurrentQuestionText();
 	}
-
 	/**
 	 * Get the possible answers for the current question
 	 * @return the possible answers for the current question -- each answer
@@ -214,7 +213,6 @@ public class BookQuiz implements QuizMaster {
 	 * @throws QuestionException if the questions cannot be written to the 
 	 * given file
 	 */
-	@Override
 	public void writeQuestions(String questionFile) throws QuestionException {
 		writer = new QuestionWriter(questionFile);
 

@@ -73,6 +73,9 @@ public class BookQuestionsTest {
 	}
 
 	@Test
+	/**
+	 * Verifies the Question Texts can be retrieved
+	 */
 	public void testGetCurrentQuestionText() throws EmptyQuestionListException {
 		assertTrue(questions.getCurrentQuestionText().equals("Standard Question 1"));
 		//Give correct answer for standard question 1. Next question will be standard
