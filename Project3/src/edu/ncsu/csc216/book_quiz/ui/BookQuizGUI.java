@@ -50,6 +50,7 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 	private static final String OK = "OK";	
 	private static final String[] QUEST_TYPES = {"Elementary Question", "Standard Question", "Advanced Question"};
 	private static final String[] ANS_CHOICES = {"A", "B", "C", "D"};
+	private static final String QUIZ_RESULTS = "Quiz Results";
 	
 	// Buttons
 	private JButton btnAddQuest = new JButton(ADD_QUEST);
@@ -110,6 +111,8 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 
 	// 
 	private String questionAnswer;
+
+	
 	
 	public BookQuizGUI(String filename) throws QuestionException {
 		try {
@@ -141,10 +144,13 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 		}
 		// Display take quiz card
 		if(e.getSource().equals(btnTake)) {
-			mainCardLayout.show(pnlCard, TAKE_QUIZ);
-			getQuestionInfo();
-			btnSubmit.setEnabled(false);
-			btnNext.setEnabled(false);
+			try {
+				getQuestionInfo();
+				mainCardLayout.show(pnlCard, TAKE_QUIZ);
+				resetQuestionButtons();
+			} catch (EmptyQuestionListException exc) {
+				JOptionPane.showMessageDialog(new JFrame(), exc.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
+			}
 		}
 		// Quit the program
 		if(e.getSource().equals(btnQuit1) || e.getSource().equals(btnQuit2) || e.getSource().equals(btnQuit3)) {
@@ -160,7 +166,8 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 		}
 		// Return to the welcome page from quiz
 		if(e.getSource().equals(btnDone1)) {
-			
+			JOptionPane.showMessageDialog(new JFrame(), getQuizResults(), QUIZ_RESULTS, JOptionPane.INFORMATION_MESSAGE);
+			mainCardLayout.show(pnlCard, WELCOME);
 		}
 		// Return to the welcome page from add
 		if(e.getSource().equals(btnDone2)) {
@@ -171,13 +178,19 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 			try {
 				lblResult.setText(quiz.processAnswer(questionAnswer));
 			} catch (EmptyQuestionListException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(new JFrame(), getQuizResults(), QUIZ_RESULTS, JOptionPane.INFORMATION_MESSAGE);
 			}
+			btnSubmit.setEnabled(false);
+			btnNext.setEnabled(true);
 		}
 		// Show next question
 		if(e.getSource().equals(btnNext)) {
-			
+			try {
+				getQuestionInfo();
+			} catch (EmptyQuestionListException exc) {
+				btnDone1.doClick();
+			}
+			resetQuestionButtons();
 		}
 		
 		// Combo boxes
@@ -213,18 +226,26 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 		}
 	}
 	
-	private void getQuestionInfo() {
+	private void resetQuestionButtons() {
+		btnSubmit.setEnabled(false);
+		btnNext.setEnabled(false);
+		lblResult.setText(" ");
+		bgChoices.clearSelection();
+	}
+	
+	private String getQuizResults() {
+		return "You answered " + quiz.getNumCorrectQuestions() + " questions correctly out of " + 
+				quiz.getNumAttemptedQuestions() + " attempts.";
+	}
+	
+	private void getQuestionInfo() throws EmptyQuestionListException {
 		String[] choices;
-		try {
-			lblQuest.setText(quiz.getCurrentQuestionText());
-			choices = quiz.getCurrentQuestionChoices();
-			radA.setText(choices[0]);
-			radB.setText(choices[1]);
-			radC.setText(choices[2]);
-			radD.setText(choices[3]);
-		} catch (EmptyQuestionListException e1) {
-			JOptionPane.showMessageDialog(new JFrame(), e1.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
-		}
+		lblQuest.setText(quiz.getCurrentQuestionText());
+		choices = quiz.getCurrentQuestionChoices();
+		radA.setText(choices[0]);
+		radB.setText(choices[1]);
+		radC.setText(choices[2]);
+		radD.setText(choices[3]);
 	}
 	
 	private void initializeUI() {
