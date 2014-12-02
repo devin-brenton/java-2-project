@@ -200,7 +200,7 @@ public class BookQuestions {
 		public String processAnswer(String answer) throws EmptyQuestionListException {
 			if(super.getCurrentQuestion() == null) {
 				throw new EmptyQuestionListException();
-			} else if(super.getCurrentQuestionAnswer().equals(answer)) {
+			} else if(super.getCurrentQuestionAnswer().equalsIgnoreCase(answer)) {
 				if(attempts == 0) {
 					numCorrectInRow++;
 					numAttemptQuests++;
@@ -261,7 +261,7 @@ public class BookQuestions {
 		public String processAnswer(String answer) throws EmptyQuestionListException {
 			if(super.getCurrentQuestion() == null) {
 				throw new EmptyQuestionListException();
-			} else if(super.getCurrentQuestionAnswer().equals(answer)) {
+			} else if(super.getCurrentQuestionAnswer().equalsIgnoreCase(answer)) {
 				numCorrectInRow++;
 				numCorrectAnswers++;
 				numAttemptQuests++;
@@ -309,7 +309,7 @@ public class BookQuestions {
 		public String processAnswer(String answer) throws EmptyQuestionListException {
 			if(super.getCurrentQuestion() == null) {
 				throw new EmptyQuestionListException();
-			} else if(super.getCurrentQuestionAnswer().equals(answer)) {
+			} else if(super.getCurrentQuestionAnswer().equalsIgnoreCase(answer)) {
 				numCorrectAnswers++;
 				numAttemptQuests++;
 				String comment = ((AdvancedQuestion) super.getCurrentQuestion()).getComment();
