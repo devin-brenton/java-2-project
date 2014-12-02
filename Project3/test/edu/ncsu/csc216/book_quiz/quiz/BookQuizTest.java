@@ -50,8 +50,9 @@ public class BookQuizTest {
 	private String correctAnswer1 = "c";
 	
 	/**
-	 * @throws java.lang.Exception
 	 * Sets up Book Quiz Test objects used in testing
+	 * @throws java.lang.Exception
+	 * 
 	 */
 	@Before
 	public void setUp() throws Exception {
@@ -71,9 +72,9 @@ public class BookQuizTest {
 		assertTrue(quiz.hasMoreQuestions());
 		
 	}
-
 	/**
-	 * Test method for {@link edu.ncsu.csc216.book_quiz.quiz.BookQuiz#hasMoreQuestions()}.
+	 * Test method for boolean HasMoreQuestions 
+	 * @throws EmptyQuestionListException
 	 */
 	@Test
 	public void testHasMoreQuestions() throws EmptyQuestionListException {
