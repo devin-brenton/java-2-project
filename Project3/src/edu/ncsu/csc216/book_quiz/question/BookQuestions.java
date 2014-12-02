@@ -26,7 +26,7 @@ public class BookQuestions {
 	public static final String CORRECT = "Correct!";
 	
 	/** Returned if question is incorrectly answered */
-	public static final String INCORRECT = "Incorrect :(";
+	public static final String INCORRECT = "Incorrect!";
 	
 	/** Space between messages in the GUI */
 	public static final String SEPARATOR = " ";

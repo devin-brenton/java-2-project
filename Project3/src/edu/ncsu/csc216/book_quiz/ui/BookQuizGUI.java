@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -19,6 +20,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import edu.ncsu.csc216.book_quiz.quiz.*;
+import edu.ncsu.csc216.book_quiz.util.EmptyQuestionListException;
 import edu.ncsu.csc216.question_library.QuestionException;
 
 public class BookQuizGUI extends JFrame implements ActionListener {
@@ -28,7 +30,7 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 	
 	// Parameters for component sizes and spacings 
 	private static final int FRAME_WIDTH = 500; 
-	private static final int FRAME_HEIGHT = 600;
+	private static final int FRAME_HEIGHT = 300;
 	private static final int FIELD_LENGTH = 100;
 	
 	// Panel and window titles
@@ -52,16 +54,19 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 	// Buttons
 	private JButton btnAddQuest = new JButton(ADD_QUEST);
 	private JButton btnTake = new JButton(TAKE_QUIZ);
-	private JButton btnQuit = new JButton(QUIT);
+	private JButton btnQuit1 = new JButton(QUIT);
+	private JButton btnQuit2 = new JButton(QUIT);
+	private JButton btnQuit3 = new JButton(QUIT);
 	private JButton btnAdd = new JButton(ADD);
 	private JButton btnWrite = new JButton(WRITE);
-	private JButton btnDone = new JButton(DONE);
+	private JButton btnDone1 = new JButton(DONE);
+	private JButton btnDone2 = new JButton(DONE);
 	private JButton btnSubmit = new JButton(SUBMIT);
 	private JButton btnNext = new JButton(NEXT);
 	
 	// Combo Boxes
-	private JComboBox cmbQuestType = new JComboBox(QUEST_TYPES);
-	private JComboBox cmbAnsChoices = new JComboBox(ANS_CHOICES);
+	private JComboBox<String> cmbQuestType = new JComboBox<String>(QUEST_TYPES);
+	private JComboBox<String> cmbAnsChoices = new JComboBox<String>(ANS_CHOICES);
 	
 	// Labels and separator
 	private JLabel lblQuestType = new JLabel("Question Type:");
@@ -94,15 +99,17 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 	private JPanel pnlWelcome = new JPanel();
 	private JPanel pnlAddQuest = new JPanel(new BorderLayout());
 	private JPanel pnlTakeQuiz = new JPanel(new BorderLayout());
-	private JPanel pnlWelcomeButtons = new JPanel();
 	private JPanel pnlAddInfo = new JPanel(new GridLayout(7, 2));
 	private JPanel pnlAddButtons = new JPanel();
-	private JPanel pnlQuizChoices = new JPanel(new GridLayout(2,1));
+	private JPanel pnlQuizChoices = new JPanel(new GridLayout(2, 1));
 	private JPanel pnlQuizButtons = new JPanel();
-	private JPanel pnlRadioButtons = new JPanel();
+	private JPanel pnlRadioButtons = new JPanel(new GridLayout(0, 1));
 	
 	// Main window
 	private Container mainWindow = getContentPane();
+
+	// 
+	private String questionAnswer;
 	
 	public BookQuizGUI(String filename) throws QuestionException {
 		try {
@@ -113,7 +120,6 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 				int returnVal = fc.showOpenDialog(this);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					userPickFilename = fc.getSelectedFile().getName();
-					System.out.println("You chose to open this file: " + fc.getSelectedFile().getName());
 				}
 				quiz = new BookQuiz(userPickFilename);
 			} else {
@@ -121,15 +127,104 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 			}
 			initializeUI();
 			this.setVisible(true);
+			this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		} catch (IllegalArgumentException e) {
 			JOptionPane.showMessageDialog(new JFrame(), e.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+	public void actionPerformed(ActionEvent e) {
+		// Display add question card
+		if(e.getSource().equals(btnAddQuest)) {
+			mainCardLayout.show(pnlCard, ADD_QUEST);
+		}
+		// Display take quiz card
+		if(e.getSource().equals(btnTake)) {
+			mainCardLayout.show(pnlCard, TAKE_QUIZ);
+			getQuestionInfo();
+			btnSubmit.setEnabled(false);
+			btnNext.setEnabled(false);
+		}
+		// Quit the program
+		if(e.getSource().equals(btnQuit1) || e.getSource().equals(btnQuit2) || e.getSource().equals(btnQuit3)) {
+			System.exit(0);
+		}
+		// Try to add the question to the available questions
+		if(e.getSource().equals(btnAdd)) {
+			
+		}
+		// Try to write all the questions to a file
+		if(e.getSource().equals(btnWrite)) {
+			
+		}
+		// Return to the welcome page from quiz
+		if(e.getSource().equals(btnDone1)) {
+			
+		}
+		// Return to the welcome page from add
+		if(e.getSource().equals(btnDone2)) {
+			
+		}
+		// Submit the answer for processing
+		if(e.getSource().equals(btnSubmit)) {
+			try {
+				lblResult.setText(quiz.processAnswer(questionAnswer));
+			} catch (EmptyQuestionListException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		// Show next question
+		if(e.getSource().equals(btnNext)) {
+			
+		}
 		
+		// Combo boxes
+		// Get the question type
+		if(e.getSource().equals(cmbQuestType)) {
+			
+		}
+		// Get the answer
+		if(e.getSource().equals(cmbAnsChoices)) {
+			
+		}
+		
+		// Radio Buttons
+		// Button A
+		if(e.getSource().equals(radA)) {
+			btnSubmit.setEnabled(true);
+			questionAnswer = "a";
+		}
+		// Button B
+		if(e.getSource().equals(radB)) {
+			btnSubmit.setEnabled(true);
+			questionAnswer = "b";
+		}
+		// Button C
+		if(e.getSource().equals(radC)) {
+			btnSubmit.setEnabled(true);
+			questionAnswer = "c";
+		}
+		// Button D
+		if(e.getSource().equals(radD)) {
+			btnSubmit.setEnabled(true);
+			questionAnswer = "d";
+		}
+	}
+	
+	private void getQuestionInfo() {
+		String[] choices;
+		try {
+			lblQuest.setText(quiz.getCurrentQuestionText());
+			choices = quiz.getCurrentQuestionChoices();
+			radA.setText(choices[0]);
+			radB.setText(choices[1]);
+			radC.setText(choices[2]);
+			radD.setText(choices[3]);
+		} catch (EmptyQuestionListException e1) {
+			JOptionPane.showMessageDialog(new JFrame(), e1.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
+		}
 	}
 	
 	private void initializeUI() {
@@ -137,6 +232,40 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 		setSize(FRAME_WIDTH, FRAME_HEIGHT);
 		setTitle(WINDOW_TITLE);
 		
+		setUpPanels();
+		
+		// Add everything to window
+		mainWindow.add(pnlCard);
+		
+		addListeners();
+	}
+	
+	private void addListeners() {
+		// Add listeners to buttons
+		btnAddQuest.addActionListener(this);
+		btnTake.addActionListener(this);
+		btnQuit1.addActionListener(this);
+		btnQuit2.addActionListener(this);
+		btnQuit3.addActionListener(this);
+		btnAdd.addActionListener(this);
+		btnWrite.addActionListener(this);
+		btnDone1.addActionListener(this);
+		btnDone2.addActionListener(this);
+		btnSubmit.addActionListener(this);
+		btnNext.addActionListener(this);
+		
+		// Add listeners to combo boxes
+		cmbQuestType.addActionListener(this);
+		cmbAnsChoices.addActionListener(this);
+		
+		// Add listeners to radio buttons
+		radA.addActionListener(this);
+		radB.addActionListener(this);
+		radC.addActionListener(this);
+		radD.addActionListener(this);
+	}
+	
+	private void setUpPanels() {
 		// Set up grid panel for adding questions
 		pnlAddInfo.add(lblQuestType);
 		pnlAddInfo.add(cmbQuestType);
@@ -156,8 +285,8 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 		// Set up panel of buttons for adding questions
 		pnlAddButtons.add(btnAdd);
 		pnlAddButtons.add(btnWrite);
-		pnlAddButtons.add(btnDone);
-		pnlAddButtons.add(btnQuit);
+		pnlAddButtons.add(btnDone2);
+		pnlAddButtons.add(btnQuit3);
 		
 		// Add Radio buttons to button group
 		bgChoices.add(radA);
@@ -178,13 +307,13 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 		// Set up panel of buttons for taking quiz
 		pnlQuizButtons.add(btnSubmit);
 		pnlQuizButtons.add(btnNext);
-		pnlQuizButtons.add(btnDone);
-		pnlQuizButtons.add(btnQuit);
+		pnlQuizButtons.add(btnDone1);
+		pnlQuizButtons.add(btnQuit2);
 		
 		// Set up main GUI faces: Welcome, Add Question, Take Quiz
 		pnlWelcome.add(btnAddQuest);
 		pnlWelcome.add(btnTake);
-		pnlWelcome.add(btnQuit);
+		pnlWelcome.add(btnQuit1);
 		
 		pnlAddQuest.add(pnlAddInfo, BorderLayout.NORTH);
 		pnlAddQuest.add(pnlAddButtons, BorderLayout.SOUTH);
@@ -196,10 +325,7 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 		// Add everything to CardLayout base
 		pnlCard.add(pnlWelcome, WELCOME);
 		pnlCard.add(pnlAddQuest, ADD_QUEST);
-		pnlCard.add(pnlTakeQuiz, TAKE_QUIZ);
-		
-		// Add Card base to window
-		mainWindow.add(pnlCard);
+		pnlCard.add(pnlTakeQuiz, TAKE_QUIZ);		
 	}
 	
 	private void enableDisable() {

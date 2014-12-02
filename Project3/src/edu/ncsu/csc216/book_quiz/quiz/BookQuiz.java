@@ -114,6 +114,8 @@ public class BookQuiz implements QuizMaster {
 	private void validateStringArray(String[] array) {
 		if(array == null) {
 			throw new IllegalArgumentException();
+		} else if(array.length != 4) {
+			throw new IllegalArgumentException();
 		} else {
 			for(int i = 0; i < array.length; i++) {
 				if(array[i] == null || array[i].equals("")) {
