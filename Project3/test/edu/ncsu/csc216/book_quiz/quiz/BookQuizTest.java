@@ -366,17 +366,17 @@ public class BookQuizTest {
 		
 		//Assert Loop to compare question (string) with Standard List's question at i
 		for (int i = 0; i < standard.size(); i++) {
-			assertTrue(standard.get(i).getQuestion().equals(copyOfQuiz.getStandardQuestions().get(i)));
+			assertTrue(standard.get(i).getQuestion().equals(copyOfQuiz.getStandardQuestions().get(i).getQuestion()));
 		}
 		
 		//Assert Loop to compare question (string) with Elementary List's question at i
 		for (int i = 0; i < elementary.size(); i++) {
-			assertTrue(elementary.get(i).getQuestion().equals(copyOfQuiz.getElementaryQuestions().get(i)));
+			assertTrue(elementary.get(i).getQuestion().equals(copyOfQuiz.getElementaryQuestions().get(i).getQuestion()));
 		}
 		
 		//Assert Loop to compare question (string) with Elementary List's question at i
 		for (int i = 0; i < advanced.size(); i++) {
-			assertTrue(advanced.get(i).getQuestion().equals(copyOfQuiz.getAdvancedQuestions().get(i)));
+			assertTrue(advanced.get(i).getQuestion().equals(copyOfQuiz.getAdvancedQuestions().get(i).getQuestion()));
 		}
 	}
 
