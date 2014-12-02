@@ -17,7 +17,6 @@ import edu.ncsu.csc216.question_library.AdvancedQuestion;
 import edu.ncsu.csc216.question_library.ElementaryQuestion;
 import edu.ncsu.csc216.question_library.QuestionException;
 import edu.ncsu.csc216.question_library.QuestionReader;
-import edu.ncsu.csc216.question_library.QuestionWriter;
 import edu.ncsu.csc216.question_library.StandardQuestion;
 
 /**
@@ -35,9 +34,6 @@ public class BookQuizTest {
 	
 	/** Reads the XML file and returns arrays of questions */
 	private QuestionReader reader;
-	
-	/** Writes XML files from the arrays of questions */
-	private QuestionWriter writer;
 	
 	/** List with 3 standard questions (after construction) */
 	private List<StandardQuestion> standard;
