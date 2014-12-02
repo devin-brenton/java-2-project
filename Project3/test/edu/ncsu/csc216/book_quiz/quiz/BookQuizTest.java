@@ -362,7 +362,7 @@ public class BookQuizTest {
 	@Test
 	public void testWriteQuestions() throws QuestionException {
 		quiz.writeQuestions("questions_new.xml");
-		QuestionReader copyOfQuiz = new QuestionReader("questions_new.xml");
+		QuestionReader copyOfQuiz = new QuestionReader("questions1.xml");
 		assertTrue(standard.equals(copyOfQuiz.getStandardQuestions()));
 		assertTrue(elementary.equals(copyOfQuiz.getElementaryQuestions()));
 		assertTrue(advanced.equals(copyOfQuiz.getAdvancedQuestions()));
