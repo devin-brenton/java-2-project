@@ -72,6 +72,10 @@ public class BookQuestionsTest {
 //		assertEquals(questions.getNumAttemptedQuestions(), 0);
 	}
 
+	/**
+	 * Verifies the Question Texts can be retrieved
+	 * @throws EmptyQuestionListException
+	 */
 	@Test
 	public void testGetCurrentQuestionText() throws EmptyQuestionListException {
 		assertTrue(questions.getCurrentQuestionText().equals("Standard Question 1"));

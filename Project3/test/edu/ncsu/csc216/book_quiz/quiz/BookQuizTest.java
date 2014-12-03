@@ -15,10 +15,8 @@ import edu.ncsu.csc216.book_quiz.question.BookQuestions;
 import edu.ncsu.csc216.book_quiz.util.EmptyQuestionListException;
 import edu.ncsu.csc216.question_library.AdvancedQuestion;
 import edu.ncsu.csc216.question_library.ElementaryQuestion;
-import edu.ncsu.csc216.question_library.Question;
 import edu.ncsu.csc216.question_library.QuestionException;
 import edu.ncsu.csc216.question_library.QuestionReader;
-import edu.ncsu.csc216.question_library.QuestionWriter;
 import edu.ncsu.csc216.question_library.StandardQuestion;
 
 /**
@@ -37,9 +35,6 @@ public class BookQuizTest {
 	/** Reads the XML file and returns arrays of questions */
 	private QuestionReader reader;
 	
-	/** Writes XML files from the arrays of questions */
-	private QuestionWriter writer;
-	
 	/** List with 3 standard questions (after construction) */
 	private List<StandardQuestion> standard;
 	
@@ -55,7 +50,9 @@ public class BookQuizTest {
 	private String correctAnswer1 = "c";
 	
 	/**
+	 * Sets up Book Quiz Test objects used in testing
 	 * @throws java.lang.Exception
+	 * 
 	 */
 	@Before
 	public void setUp() throws Exception {
@@ -75,9 +72,9 @@ public class BookQuizTest {
 		assertTrue(quiz.hasMoreQuestions());
 		
 	}
-
 	/**
-	 * Test method for {@link edu.ncsu.csc216.book_quiz.quiz.BookQuiz#hasMoreQuestions()}.
+	 * Test method for boolean HasMoreQuestions 
+	 * @throws EmptyQuestionListException
 	 */
 	@Test
 	public void testHasMoreQuestions() throws EmptyQuestionListException {
@@ -362,10 +359,22 @@ public class BookQuizTest {
 	@Test
 	public void testWriteQuestions() throws QuestionException {
 		quiz.writeQuestions("questions_new.xml");
-		QuestionReader copyOfQuiz = new QuestionReader("questions1.xml");
-		assertTrue(standard.equals(copyOfQuiz.getStandardQuestions()));
-		assertTrue(elementary.equals(copyOfQuiz.getElementaryQuestions()));
-		assertTrue(advanced.equals(copyOfQuiz.getAdvancedQuestions()));
+		QuestionReader copyOfQuiz = new QuestionReader("questions_new.xml");
+		
+		//Assert Loop to compare question (string) with Standard List's question at i
+		for (int i = 0; i < standard.size(); i++) {
+			assertTrue(standard.get(i).getQuestion().equals(copyOfQuiz.getStandardQuestions().get(i).getQuestion()));
+		}
+		
+		//Assert Loop to compare question (string) with Elementary List's question at i
+		for (int i = 0; i < elementary.size(); i++) {
+			assertTrue(elementary.get(i).getQuestion().equals(copyOfQuiz.getElementaryQuestions().get(i).getQuestion()));
+		}
+		
+		//Assert Loop to compare question (string) with Elementary List's question at i
+		for (int i = 0; i < advanced.size(); i++) {
+			assertTrue(advanced.get(i).getQuestion().equals(copyOfQuiz.getAdvancedQuestions().get(i).getQuestion()));
+		}
 	}
 
 }
