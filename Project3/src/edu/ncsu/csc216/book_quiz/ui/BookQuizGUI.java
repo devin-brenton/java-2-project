@@ -7,7 +7,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -23,7 +22,14 @@ import edu.ncsu.csc216.book_quiz.quiz.*;
 import edu.ncsu.csc216.book_quiz.util.EmptyQuestionListException;
 import edu.ncsu.csc216.question_library.QuestionException;
 
+/**
+ * Implements the GUI for a BookQuiz
+ * @author Devin Brenton
+ * @author Rohith Panuganti
+ */
 public class BookQuizGUI extends JFrame implements ActionListener {
+	/** ID for serialization */
+	private static final long serialVersionUID = 1L;
 
 	// Backend model
 	private QuizMaster quiz;
@@ -47,7 +53,6 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 	private static final String DONE = "Done";
 	private static final String SUBMIT = "Submit Answer";
 	private static final String NEXT = "Next Question";
-	private static final String OK = "OK";	
 	private static final String[] QUEST_TYPES = {"Standard Question", "Elementary Question", "Advanced Question"};
 	private static final String[] ANS_CHOICES = {"A", "B", "C", "D"};
 	private static final String QUIZ_RESULTS = "Quiz Results";
@@ -125,12 +130,16 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 	private String questionAnswer;
 	
 	// Question type when adding questions
-	private String questionType;
+	private String questionType = "Standard Question";
 
 	// Answer choice when adding questions
-	private String answerChoice;
+//	private String answerChoice;
 	
-	public BookQuizGUI(String filename) throws QuestionException {
+	/**
+	 * Constructor - creates quizMaster to handle question manipulation from input file, initializes UI
+	 * @param filename XML file to get the questions for quizzing from
+	 */
+	public BookQuizGUI(String filename) {
 		try {
 			if (filename == null) {
 				String userPickFilename = null;
@@ -149,9 +158,15 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 			this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		} catch (IllegalArgumentException e) {
 			JOptionPane.showMessageDialog(new JFrame(), e.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
+		} catch (QuestionException qe) {
+			JOptionPane.showMessageDialog(new JFrame(), "Invalid File", ERROR, JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
+	/**
+	 * Handles all actions for the various buttons for the GUI.
+	 * @param e the button click
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// Display add question card
@@ -261,6 +276,9 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 		}
 	}
 	
+	/**
+	 * Private method - adds the question to the list of questions if no errors are present
+	 */
 	private void addQuestion() {
 		String question = txtQuestAdd.getText();
 		String[] choices = {txtChoiceA.getText(), txtChoiceB.getText(), 
@@ -293,6 +311,9 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 		clHintComment.show(pnlHintComment, BLANK);		
 	}
 	
+	/**
+	 * Private method - resets the buttons after answering a question or before showing the first question
+	 */
 	private void resetQuestionButtons() {
 		btnSubmit.setEnabled(false);
 		btnNext.setEnabled(false);
@@ -300,11 +321,19 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 		bgChoices.clearSelection();
 	}
 	
+	/**
+	 * Private method - Returns the quiz results: numCorrect, numAttempted
+	 * @return results of quiz
+	 */
 	private String getQuizResults() {
 		return "You answered " + quiz.getNumCorrectQuestions() + " questions correctly out of " + 
 				quiz.getNumAttemptedQuestions() + " attempts.";
 	}
 	
+	/**
+	 * Sets the GUI to display the current questions info
+	 * @throws EmptyQuestionListException if there are no more questions
+	 */
 	private void getQuestionInfo() throws EmptyQuestionListException {
 		String[] choices;
 		lblQuest.setText(quiz.getCurrentQuestionText());
@@ -315,6 +344,9 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 		radD.setText(choices[3]);
 	}
 	
+	/**
+	 * Initializes the GUI
+	 */
 	private void initializeUI() {
 		//  Initialize the main frame parameters.
 		setSize(FRAME_WIDTH, FRAME_HEIGHT);
@@ -328,6 +360,9 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 		addListeners();
 	}
 	
+	/**
+	 * Adds listeners to all buttons, combo boxes, and radio buttons
+	 */
 	private void addListeners() {
 		// Add listeners to buttons
 		btnAddQuest.addActionListener(this);
@@ -353,6 +388,9 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 		radD.addActionListener(this);
 	}
 	
+	/**
+	 * Adds all panels to the GUI
+	 */
 	private void setUpPanels() {
 		// Set up grid panel for adding questions
 		pnlAddInfo.add(lblQuestType);
@@ -426,14 +464,15 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 		pnlCard.add(pnlTakeQuiz, TAKE_QUIZ);		
 	}
 	
+	/**
+	 * Starts the GUI with either the passed in parameter or by asking the user to pick a file.
+	 * @param args Command line arguments - used for file input
+	 */
 	public static void main(String[] args) {
-		try {
-			if (args.length > 0)
-				new BookQuizGUI(args[0]);
-			else
-				new BookQuizGUI(null);
-		} catch (QuestionException e) {
-			JOptionPane.showMessageDialog(new JFrame(), "Invalid File");
+		if (args.length > 0) {
+			new BookQuizGUI(args[0]);
+		} else {
+			new BookQuizGUI(null);
 		}
 	}
 }

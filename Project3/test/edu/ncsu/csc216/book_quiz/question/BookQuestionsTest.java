@@ -8,7 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import edu.ncsu.csc216.question_library.*;
-import edu.ncsu.csc216.book_quiz.*;
 import edu.ncsu.csc216.book_quiz.util.EmptyQuestionListException;
 
 /**
