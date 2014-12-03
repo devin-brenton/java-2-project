@@ -247,6 +247,9 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 			if(questionType.equals("Advanced Question")) {
 				clHintComment.show(pnlHintComment, COMMENT);
 			}
+			if(questionType.equals("Standard Question")) {
+				clHintComment.show(pnlHintComment, BLANK);
+			}
 		}
 //		// Get the answer
 //		if(e.getSource().equals(cmbAnsChoices)) {
