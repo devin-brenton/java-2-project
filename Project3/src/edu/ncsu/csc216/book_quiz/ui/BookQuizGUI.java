@@ -48,9 +48,12 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 	private static final String SUBMIT = "Submit Answer";
 	private static final String NEXT = "Next Question";
 	private static final String OK = "OK";	
-	private static final String[] QUEST_TYPES = {"Elementary Question", "Standard Question", "Advanced Question"};
+	private static final String[] QUEST_TYPES = {"Standard Question", "Elementary Question", "Advanced Question"};
 	private static final String[] ANS_CHOICES = {"A", "B", "C", "D"};
 	private static final String QUIZ_RESULTS = "Quiz Results";
+	private static final String BLANK = " ";
+	private static final String HINT = "Hint:";
+	private static final String COMMENT = "Comment:";
 	
 	// Buttons
 	private JButton btnAddQuest = new JButton(ADD_QUEST);
@@ -79,6 +82,8 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 	private JLabel lblAnswerAdd = new JLabel("Answer:");
 	private JLabel lblQuest = new JLabel();
 	private JLabel lblResult = new JLabel();
+	private JLabel lblHint = new JLabel(HINT);
+	private JLabel lblComment = new JLabel(COMMENT);
 	
 	// Text fields
 	private JTextField txtQuestAdd = new JTextField(FIELD_LENGTH);
@@ -86,6 +91,8 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 	private JTextField txtChoiceB = new JTextField(FIELD_LENGTH);
 	private JTextField txtChoiceC = new JTextField(FIELD_LENGTH);
 	private JTextField txtChoiceD = new JTextField(FIELD_LENGTH);
+	private JTextField txtHint = new JTextField(FIELD_LENGTH);
+	private JTextField txtComment = new JTextField(FIELD_LENGTH);
 	
 	// Radio Buttons
 	private JRadioButton radA = new JRadioButton();
@@ -105,14 +112,23 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 	private JPanel pnlQuizChoices = new JPanel(new GridLayout(2, 1));
 	private JPanel pnlQuizButtons = new JPanel();
 	private JPanel pnlRadioButtons = new JPanel(new GridLayout(0, 1));
+	private CardLayout clHintComment = new CardLayout(1, 1);
+	private JPanel pnlHintComment = new JPanel(clHintComment);
+	private JPanel pnlHint = new JPanel(new GridLayout(1, 0));
+	private JPanel pnlComment = new JPanel(new GridLayout(1, 0));
+	private JPanel pnlBlank = new JPanel();
 	
 	// Main window
 	private Container mainWindow = getContentPane();
 
-	// 
+	// Question answer when quizzing
 	private String questionAnswer;
-
 	
+	// Question type when adding questions
+	private String questionType;
+
+	// Answer choice when adding questions
+	private String answerChoice;
 	
 	public BookQuizGUI(String filename) throws QuestionException {
 		try {
@@ -158,11 +174,24 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 		}
 		// Try to add the question to the available questions
 		if(e.getSource().equals(btnAdd)) {
-			
+			addQuestion();
 		}
 		// Try to write all the questions to a file
 		if(e.getSource().equals(btnWrite)) {
-			
+			try {
+				String userPickFilename = null;
+				JFileChooser fc = new JFileChooser(".");
+				fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+				int returnVal = fc.showSaveDialog(this);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					userPickFilename = fc.getSelectedFile().getName();
+				}
+				quiz.writeQuestions(userPickFilename);
+			} catch (QuestionException exc) {
+				JOptionPane.showMessageDialog(new JFrame(), "Unable to write to file.", ERROR, JOptionPane.ERROR_MESSAGE);
+			} catch (NullPointerException n) {
+				// Don't do anything if the user didn't pick a file
+			}
 		}
 		// Return to the welcome page from quiz
 		if(e.getSource().equals(btnDone1)) {
@@ -171,13 +200,13 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 		}
 		// Return to the welcome page from add
 		if(e.getSource().equals(btnDone2)) {
-			
+			mainCardLayout.show(pnlCard, WELCOME);
 		}
 		// Submit the answer for processing
 		if(e.getSource().equals(btnSubmit)) {
 			try {
 				lblResult.setText(quiz.processAnswer(questionAnswer));
-			} catch (EmptyQuestionListException e1) {
+			} catch (EmptyQuestionListException exc) {
 				JOptionPane.showMessageDialog(new JFrame(), getQuizResults(), QUIZ_RESULTS, JOptionPane.INFORMATION_MESSAGE);
 			}
 			btnSubmit.setEnabled(false);
@@ -196,12 +225,18 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 		// Combo boxes
 		// Get the question type
 		if(e.getSource().equals(cmbQuestType)) {
-			
+			questionType = (String) cmbQuestType.getSelectedItem();
+			if(questionType.equals("Elementary Question")) {
+				clHintComment.show(pnlHintComment, HINT);
+			}
+			if(questionType.equals("Advanced Question")) {
+				clHintComment.show(pnlHintComment, COMMENT);
+			}
 		}
-		// Get the answer
-		if(e.getSource().equals(cmbAnsChoices)) {
-			
-		}
+//		// Get the answer
+//		if(e.getSource().equals(cmbAnsChoices)) {
+//			questionAnswer = (String) cmbAnsChoices.getSelectedItem();
+//		}
 		
 		// Radio Buttons
 		// Button A
@@ -224,6 +259,38 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 			btnSubmit.setEnabled(true);
 			questionAnswer = "d";
 		}
+	}
+	
+	private void addQuestion() {
+		String question = txtQuestAdd.getText();
+		String[] choices = {txtChoiceA.getText(), txtChoiceB.getText(), 
+				txtChoiceC.getText(), txtChoiceD.getText()};
+		String answer = (String) cmbAnsChoices.getSelectedItem();
+		try {
+			if(questionType.equals("Standard Question")) {
+				quiz.addStandardQuestion(question, choices, answer);
+			} else if(questionType.equals("Elementary Question")) {
+				String hint = txtHint.getText();
+				quiz.addElementaryQuestion(question, choices, answer, hint);
+			} else {
+				String comment = txtComment.getText();
+				quiz.addAdvancedQuestion(question, choices, answer, comment);
+			} 
+		} catch (IllegalArgumentException e) {
+			JOptionPane.showMessageDialog(new JFrame(), e.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+	
+		cmbQuestType.setSelectedIndex(0);
+		txtQuestAdd.setText("");
+		txtChoiceA.setText("");
+		txtChoiceB.setText("");
+		txtChoiceC.setText("");
+		txtChoiceD.setText("");
+		cmbAnsChoices.setSelectedIndex(0);
+		txtHint.setText("");
+		txtComment.setText("");
+		clHintComment.show(pnlHintComment, BLANK);		
 	}
 	
 	private void resetQuestionButtons() {
@@ -309,6 +376,15 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 		pnlAddButtons.add(btnDone2);
 		pnlAddButtons.add(btnQuit3);
 		
+		// Set up Hint/Comment portion for adding questions
+		pnlHint.add(lblHint);
+		pnlHint.add(txtHint);
+		pnlComment.add(lblComment);
+		pnlComment.add(txtComment);
+		pnlHintComment.add(pnlBlank, BLANK);
+		pnlHintComment.add(pnlHint, HINT);
+		pnlHintComment.add(pnlComment, COMMENT);
+		
 		// Add Radio buttons to button group
 		bgChoices.add(radA);
 		bgChoices.add(radB);
@@ -337,6 +413,7 @@ public class BookQuizGUI extends JFrame implements ActionListener {
 		pnlWelcome.add(btnQuit1);
 		
 		pnlAddQuest.add(pnlAddInfo, BorderLayout.NORTH);
+		pnlAddQuest.add(pnlHintComment, BorderLayout.CENTER);
 		pnlAddQuest.add(pnlAddButtons, BorderLayout.SOUTH);
 		
 		pnlTakeQuiz.add(lblQuest, BorderLayout.NORTH);
